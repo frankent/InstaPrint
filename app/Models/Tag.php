@@ -4,13 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Token extends Model {
+class Tag extends Model {
 
-	protected $table = 'token';
+	protected $table = 'tag';
 //	public $id;
 	public $name;
-	public $picture;
-	public $token;
 	public $is_active;
 //	public $created_at;
 //	public $updated_at;
