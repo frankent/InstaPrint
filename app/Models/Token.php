@@ -8,10 +8,10 @@ class Token extends Model {
 
 	protected $table = 'token';
 //	public $id;
-	public $name;
-	public $picture;
-	public $token;
-	public $is_active;
+//	public $name;
+//	public $picture;
+//	public $token;
+//	public $is_active;
 //	public $created_at;
 //	public $updated_at;
 }

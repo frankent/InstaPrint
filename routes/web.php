@@ -1,4 +1,5 @@
 <?php
+
 /*
   |--------------------------------------------------------------------------
   | Web Routes
@@ -14,6 +15,7 @@ Route::get('/', 'AdminController@getIndex');
 Route::get('/token', 'AdminController@getToken');
 Route::get('/hashtag', 'AdminController@getHashtag');
 
-Route::get('/staff', 'ManageController@getIndex');
-Route::get('/callback', 'ManageController@getCallback');
-Route::get('/test', 'ManageController@getTest');
+Route::get('/operation/staff', 'OperationController@getIndex');
+Route::get('/callback', 'OperationController@getCallback');
+Route::get('/operation/disable-token', 'OperationController@getDisbleToken');
+Route::get('/operation/test', 'OperationController@getTest');

@@ -7,7 +7,12 @@
  */
 
 namespace App\Http\Controllers;
+
 use App\Models\Token;
+use App\Libraries\Instagram;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Log;
+
 /**
  * Description of AdminController
  *
@@ -15,13 +20,24 @@ use App\Models\Token;
  */
 class AdminController extends Controller {
 
+	private $instagram;
+
+	public function __construct() {
+		$config			 = config('instagram');
+		$this->instagram = new Instagram($config);
+	}
+
 	public function getIndex() {
 		return view('admin.index');
 	}
-	
+
 	public function getToken() {
-		$token  = Token::get();
-		return view('admin.token', array('token' => $token));
+		$token	 = Token::orderBy('created_at', 'desc')->get();
+		$data	 = array(
+			'authorize_link' => $this->instagram->getLoginUrl(array('basic', 'public_content')),
+			'token'			 => $token->toArray()
+		);
+		return view('admin.token', $data);
 	}
 
 	public function getHashtag() {
