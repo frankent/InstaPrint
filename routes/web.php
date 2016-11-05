@@ -10,9 +10,9 @@
   |
  */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'AdminController@getIndex');
+Route::get('/token', 'AdminController@getToken');
+Route::get('/hashtag', 'AdminController@getHashtag');
 
 Route::get('/staff', 'ManageController@getIndex');
 Route::get('/callback', 'ManageController@getCallback');
