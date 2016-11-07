@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Tag;
 use App\Models\Token;
+use App\Models\Feed;
 
 /**
  * Description of OperationController
@@ -95,11 +96,56 @@ class OperationController extends Controller
         }
 
         foreach ($tag_status as $each_tag) {
-            $tag = Tag::find($each_tag['tag_id']);
+            $tag            = Tag::find($each_tag['tag_id']);
             $tag->is_active = (int) $each_tag['is_active'];
             $tag->save();
         }
-        
+
         return redirect()->action('AdminController@getHashtag')->with('status', array('state' => true, 'msg' => 'ระบบอัพเดตสถานะ Hash Tag เรียบร้อยแล้ว'));
+    }
+
+    public function getMedia()
+    {
+        $alive_token = Token::where('is_active', true)->get()->toArray();
+
+        if (empty($alive_token)) {
+            return false;
+        }
+
+        $token        = $alive_token[array_rand($alive_token)];
+        $access_token = $token['token'];
+        $user_info    = $this->instagram->getUserInfo($access_token);
+        if ($user_info == false) {
+            $current_token            = Token::find($token['id']);
+            $current_token->is_active = false;
+            $current_token->save();
+        }
+
+        $all_tags = Tag::where('is_active', true)->get()->toArray();
+        foreach ($all_tags as $tag) {
+            $hash_tag = $tag['name'];
+            $feed     = $this->instagram->getHashTagMedia($hash_tag, $access_token);
+            if ($feed != false) {
+                foreach ($feed['data'] as $post) {
+                    $validate = Validator::make(array('post_id' => $post['id']), array('post_id' => 'required|unique:feed,post_id'));
+                    if ($validate->passes()) {
+
+                        $feed_post                = new Feed;
+                        $feed_post->picture_s     = $post['images']['thumbnail']['url'];
+                        $feed_post->picture_m     = $post['images']['low_resolution']['url'];
+                        $feed_post->picture_l     = $post['images']['standard_resolution']['url'];
+                        $feed_post->name          = $post['user']['full_name'];
+                        $feed_post->profile_pic   = $post['user']['profile_picture'];
+                        $feed_post->caption       = empty($post['caption']) ? null : array_get($post['caption'], 'text');
+                        $feed_post->post_id       = $post['id'];
+                        $feed_post->tag_id        = $tag['id'];
+                        $feed_post->post_location = empty($post['location']) ? null : array_get($post['location'], 'name');
+                        $feed_post->save();
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 }

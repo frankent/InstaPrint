@@ -59,8 +59,16 @@ class AdminController extends Controller
         return view('admin.hashtag', $data);
     }
 
-    public function getFeed()
+    public function getFeed($tag_id)
     {
-        return 'xx';
+        $tag  = Tag::find($tag_id);
+        $feed = Feed::where('tag_id', $tag_id)->orderBy('created_at', 'desc')->get()->toArray();
+
+        $data = array(
+            'tag'  => $tag,
+            'feed' => $feed
+        );
+
+        return view('admin.archivetag', $data);
     }
 }
