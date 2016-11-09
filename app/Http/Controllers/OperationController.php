@@ -127,7 +127,7 @@ class OperationController extends Controller
             $feed     = $this->instagram->getHashTagMedia($hash_tag, $access_token);
             if ($feed != false) {
                 foreach ($feed['data'] as $post) {
-                    $validate = Validator::make(array('post_id' => $post['id']), array('post_id' => 'required|unique:feed,post_id'));
+                    $validate = Validator::make(array('post_id' => $post['id']), array('post_id' => 'required|unique:feed,post_id,NULL,id,tag_id,' . $tag['id']));
                     if ($validate->passes()) {
 
                         $feed_post                = new Feed;
