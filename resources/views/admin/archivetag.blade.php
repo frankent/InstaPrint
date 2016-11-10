@@ -27,16 +27,25 @@
             <div class="col-sm-4">
                 <div class="box">
                     <div class="box-header with-border">
-                        <img src="<?php echo $each_feed['profile_pic']; ?>" alt="" style="width: 50px; height: 50px; margin-right: 15px;" />
-                        <h3 class="box-title">
-                            <?php echo $each_feed['name']; ?>
-                            <?php if (!empty($each_feed['location'])): ?>
-                                <small><?php echo $each_feed['location']; ?></small>
-                            <?php endif; ?>
-                        </h3>
+                        <div class="clearfix">
+                            <div class="col-xs-3" style="padding: 0px;">
+                                <img src="<?php echo $each_feed['profile_pic']; ?>" alt="" class="img-responsive" />
+                            </div>
+                            <div class="col-xs-9">
+                                <h3 class="box-title">
+                                    <?php echo $each_feed['name']; ?>
+                                    <?php if (!empty($each_feed['location'])): ?>
+                                        <small><?php echo $each_feed['location']; ?></small>
+                                    <?php endif; ?>
+                                </h3>
+                                <?php if (!empty($each_feed['post_location'])): ?>
+                                    <p><i class="fa fa-location-arrow" aria-hidden="true"></i>&nbsp;<span id="post_location"><?php echo $each_feed['post_location']; ?></span></p>
+                                <?php endif; ?>
+                            </div>
+                        </div>
                     </div>
                     <div class="box-body">
-                        <img src="<?php echo $each_feed['picture_m']; ?>" alt="" class="img-responsive" />
+                        <img src="<?php echo str_replace('150x150', '640x640', $each_feed['picture_s']); ?>" alt="" class="img-responsive" />
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
@@ -47,6 +56,32 @@
             </div>
         <?php endforeach; ?>
     </div>
+
+    <?php if ($pagination['last_page'] >= 1): ?>
+        <div class="row">
+            <div class="col-xs-12 text-right">
+                <ul class="pagination">
+                    <?php if (!empty($pagination['prev_page_url'])): ?>
+                        <li class="paginate_button previous <?php echo empty($pagination['prev_page_url']) ? "disabled" : ""; ?>">
+                            <a href="<?php echo $pagination['prev_page_url']; ?>" tabindex="0">Previous</a>
+                        </li>
+                    <?php endif; ?>
+                    <?php for ($i = 1; $i <= $pagination['last_page']; $i++): ?>
+                        <li class="paginate_button <?php echo $i == $pagination['current_page'] ? 'active' : ''; ?>">
+                            <a href="<?php echo action('AdminController@getFeed', array('tag_id' => $tag['id'], 'page' => $i)); ?>" data-dt-idx="<?php echo $i; ?>" tabindex="0">
+                                <?php echo $i; ?>
+                            </a>
+                        </li>
+                    <?php endfor; ?>
+                    <?php if (!empty($pagination['next_page_url'])): ?>
+                        <li class="paginate_button next <?php echo empty($pagination['next_page_url']) ? "disabled" : ""; ?>">
+                            <a href="<?php echo $pagination['next_page_url']; ?>" tabindex="0">Next</a>
+                        </li>
+                    <?php endif; ?>
+                </ul>
+            </div>
+        </div>
+    <?php endif; ?>
 </section>
 <!-- /.content -->
 

@@ -32,7 +32,16 @@ class AdminController extends Controller
 
     public function getIndex()
     {
-        return view('admin.index');
+        $hash_tag = Tag::where('is_active', true)->orderBy('created_at', 'desc')->get()->toArray();
+        foreach ($hash_tag as &$each_tag) {
+            $each_tag['total_feed'] = Feed::where('tag_id', $each_tag['id'])->count();
+        }
+
+        $data = array(
+            'tag' => $hash_tag
+        );
+
+        return view('admin.dashboard', $data);
     }
 
     public function getToken()
@@ -62,13 +71,43 @@ class AdminController extends Controller
     public function getFeed($tag_id)
     {
         $tag  = Tag::find($tag_id);
-        $feed = Feed::where('tag_id', $tag_id)->orderBy('created_at', 'desc')->get()->toArray();
-
+        $feed = Feed::where('tag_id', $tag_id)->orderBy('created_at', 'desc')->paginate(30)->toArray();
         $data = array(
-            'tag'  => $tag,
-            'feed' => $feed
+            'tag'        => $tag,
+            'pagination' => array(
+                'prev_page_url' => $feed['prev_page_url'],
+                'next_page_url' => $feed['next_page_url'],
+                'current_page'  => $feed['current_page'],
+                'last_page'     => $feed['last_page']
+            ),
+            'feed'       => $feed['data']
         );
 
         return view('admin.archivetag', $data);
+    }
+
+    public function getCarousel($tag_id)
+    {
+        $page = Input::get('page', 1);
+        $feed = Feed::select('id', 'picture_l', 'name', 'post_location', 'caption', 'profile_pic')->where('tag_id', $tag_id)->paginate(10)->toArray();
+        $data = [
+            'tag_id'    => $tag_id,
+            'next_feed' => action('AdminController@getMoreCorousel', array('page' => ($page + 1), 'tag_id' => $tag_id)),
+            'feed'      => $feed['data']
+        ];
+        return view('carousel.slide', $data);
+    }
+
+    public function getMoreCorousel()
+    {
+        $page   = Input::get('page', 1);
+        $tag_id = Input::get('tag_id');
+        $feed   = Feed::select('id', 'picture_l', 'name', 'post_location', 'caption', 'profile_pic')->where('tag_id', $tag_id)->paginate(10)->toArray();
+        $data   = [
+            'tag_id'    => $tag_id,
+            'next_feed' => action('AdminController@getMoreCorousel', array('page' => ($page + 1), 'tag_id' => $tag_id)),
+            'feed'      => $feed['data']
+        ];
+        return $data;
     }
 }

@@ -16,6 +16,8 @@ Route::post('/hashtag', 'OperationController@postHashtag');
 Route::get('/hashtag', 'AdminController@getHashtag');
 Route::post('/hashtag/status', 'OperationController@postHashtagStatus');
 Route::get('/hashtag/{tag_id}/feed', 'AdminController@getFeed');
+Route::get('/hashtag/{tag_id}/carousel', 'AdminController@getCarousel');
+Route::get('/api/hashtag', 'AdminController@getMoreCorousel');
 
 Route::get('/operation/staff', 'OperationController@getIndex');
 Route::get('/callback', 'OperationController@getCallback');
