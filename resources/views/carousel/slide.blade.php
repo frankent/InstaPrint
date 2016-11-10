@@ -134,7 +134,6 @@
                 var total = slide.length;
                 index = index % total;
                 var current_slide = slide[index];
-                console.log(index, total);
                 index++;
 
                 var img_slide = current_slide['picture_l'];
