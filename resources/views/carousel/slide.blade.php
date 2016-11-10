@@ -129,54 +129,59 @@
             var slide = [];
             var slide_key = {};
             var index = 0;
+
+            function slideShow() {
+                var total = slide.length;
+                index = index % total;
+                var current_slide = slide[index];
+                console.log(index, total);
+                index++;
+
+                var img_slide = current_slide['picture_l'];
+                $('#feed_display').fadeOut(function () {
+                    $('#profile_name').text(current_slide['name']);
+                    $('#profile_pic').attr('src', current_slide['profile_pic']);
+                    $('#post_caption').text(current_slide['caption']);
+
+                    if (current_slide['post_location']) {
+                        $('#post_location').text(current_slide['post_location']);
+                        $('#post_location_paragraph').show();
+                    } else {
+                        $('#post_location_paragraph').hide();
+                    }
+
+                    $(this).css({'background-image': 'url("' + img_slide + '")'}).fadeIn();
+                });
+            }
+
             $(function () {
                 slide = JSON.parse($('#slide_temp').text());
                 $.each(slide, function (i, v) {
                     slide_key[v.id] = true;
                 });
+                slideShow();
+                setInterval(function () {
+                    slideShow();
+                }, 10000);
 
                 setInterval(function () {
-                    var total = slide.length;
-                    index = index % total;
-                    var current_slide = slide[index];
-                    console.log(index, total);
-                    index++;
+                    var url = $('#feed_display').data('next-feed');
+                    $.get(url, function (res) {
+                        if (res.feed.length > 0) {
+                            $.each(res.feed, function (i, v) {
+                                if (!slide_key.hasOwnProperty([v.id])) {
+                                    slide_key[v.id] = true;
+                                    slide.push(v);
+                                }
+                            });
 
-                    var img_slide = current_slide['picture_l'];
-                    $('#feed_display').fadeOut(function () {
-                        $('#profile_name').text(current_slide['name']);
-                        $('#profile_pic').attr('src', current_slide['profile_pic']);
-                        $('#post_caption').text(current_slide['caption']);
-
-                        if (current_slide['post_location']) {
-                            $('#post_location').text(current_slide['post_location']);
-                            $('#post_location_paragraph').show();
-                        } else {
-                            $('#post_location_paragraph').hide();
-                        }
-
-                        $(this).css({'background-image': 'url("' + img_slide + '")'}).fadeIn();
-                    });
-                }, 5000);
-            });
-
-            setInterval(function () {
-                var url = $('#feed_display').data('next-feed');
-                $.get(url, function (res) {
-                    if (res.feed.length > 0) {
-                        $.each(res.feed, function (i, v) {
-                            if (!slide_key.hasOwnProperty([v.id])) {
-                                slide_key[v.id] = true;
-                                slide.push(v);
+                            if (res.feed.length == 10) {
+                                $('#feed_display').data('next-feed', res.next_feed);
                             }
-                        });
-
-                        if (res.feed.length == 10) {
-                            $('#feed_display').data('next-feed', res.next_feed);
                         }
-                    }
-                }, 'json');
-            }, 15000);
+                    }, 'json');
+                }, 30000);
+            });
         </script>
     </body>
 </html>
