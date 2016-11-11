@@ -22,40 +22,45 @@
             <p>ไม่พบข้อมูล Feed</p>
         </div>
     <?php endif; ?>
-    <div class="row">
-        <?php foreach ($feed as $each_feed): ?>
-            <div class="col-sm-4">
-                <div class="box">
-                    <div class="box-header with-border">
-                        <div class="clearfix">
-                            <div class="col-xs-3" style="padding: 0px;">
-                                <img src="<?php echo $each_feed['profile_pic']; ?>" alt="" class="img-responsive" />
-                            </div>
-                            <div class="col-xs-9">
-                                <h3 class="box-title">
-                                    <?php echo $each_feed['name']; ?>
-                                    <?php if (!empty($each_feed['location'])): ?>
-                                        <small><?php echo $each_feed['location']; ?></small>
+    
+    <?php $feed_chunk = array_chunk($feed, 3); ?>
+    <?php foreach($feed_chunk as $feed_split): ?>
+        <div class="row">
+            <?php foreach ($feed_split as $each_feed): ?>
+                <div class="col-sm-4">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <div class="clearfix">
+                                <div class="col-xs-3" style="padding: 0px;">
+                                    <img src="<?php echo $each_feed['profile_pic']; ?>" alt="" class="img-responsive" />
+                                </div>
+                                <div class="col-xs-9">
+                                    <h3 class="box-title">
+                                        <?php echo $each_feed['name']; ?>
+                                        <?php if (!empty($each_feed['location'])): ?>
+                                            <small><?php echo $each_feed['location']; ?></small>
+                                        <?php endif; ?>
+                                    </h3>
+                                    <?php if (!empty($each_feed['post_location'])): ?>
+                                        <p><i class="fa fa-location-arrow" aria-hidden="true"></i>&nbsp;<span id="post_location"><?php echo $each_feed['post_location']; ?></span></p>
                                     <?php endif; ?>
-                                </h3>
-                                <?php if (!empty($each_feed['post_location'])): ?>
-                                    <p><i class="fa fa-location-arrow" aria-hidden="true"></i>&nbsp;<span id="post_location"><?php echo $each_feed['post_location']; ?></span></p>
-                                <?php endif; ?>
+                                </div>
                             </div>
                         </div>
+                        <div class="box-body">
+                            <img src="<?php echo str_replace('150x150', '640x640', $each_feed['picture_s']); ?>" alt="" class="img-responsive" />
+                        </div>
+                        <!-- /.box-body -->
+                        <div class="box-footer">
+                            <?php echo $each_feed['caption']; ?>
+                        </div>
+                        <!-- /.box-footer-->
                     </div>
-                    <div class="box-body">
-                        <img src="<?php echo str_replace('150x150', '640x640', $each_feed['picture_s']); ?>" alt="" class="img-responsive" />
-                    </div>
-                    <!-- /.box-body -->
-                    <div class="box-footer">
-                        <?php echo $each_feed['caption']; ?>
-                    </div>
-                    <!-- /.box-footer-->
                 </div>
-            </div>
-        <?php endforeach; ?>
-    </div>
+            <?php endforeach; ?>
+        </div>
+    <?php endforeach; ?>
+
 
     <?php if ($pagination['last_page'] >= 1): ?>
         <div class="row">
