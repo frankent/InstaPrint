@@ -89,21 +89,34 @@ class AdminController extends Controller
     public function getCarousel($tag_id)
     {
         $page = Input::get('page', 1);
-        $feed = Feed::select('id', 'picture_l', 'name', 'post_location', 'caption', 'profile_pic')->where('tag_id', $tag_id)->paginate(10)->toArray();
+        $feed = Feed::select('id', 'picture_s as thumb', 'picture_l', 'name', 'post_location', 'caption', 'profile_pic')->where('tag_id', $tag_id)->paginate(9)->toArray();
+        foreach ($feed['data'] as &$each_feed) {
+            $each_feed['thumb_xl'] = str_replace('150x150', '640x640', $each_feed['thumb']);
+            $each_feed['thumb']    = str_replace('150x150', '320x320', $each_feed['thumb']);
+        }
+
+        $tag_info = Tag::select('name')->find($tag_id)->toArray();
+
         $data = [
             'tag_id'    => $tag_id,
+            'tag_name'  => array_get($tag_info, 'name'),
             'next_feed' => action('AdminController@getMoreCorousel', array('page' => ($page + 1), 'tag_id' => $tag_id)),
             'feed'      => $feed['data']
         ];
-        return view('carousel.slide', $data);
+        return view('carousel.feed', $data);
     }
 
     public function getMoreCorousel()
     {
         $page   = Input::get('page', 1);
         $tag_id = Input::get('tag_id');
-        $feed   = Feed::select('id', 'picture_l', 'name', 'post_location', 'caption', 'profile_pic')->where('tag_id', $tag_id)->paginate(10)->toArray();
-        $data   = [
+        $feed   = Feed::select('id', 'picture_s as thumb', 'picture_l', 'name', 'post_location', 'caption', 'profile_pic')->where('tag_id', $tag_id)->paginate(9)->toArray();
+        foreach ($feed['data'] as &$each_feed) {
+            $each_feed['thumb_xl'] = str_replace('150x150', '640x640', $each_feed['thumb']);
+            $each_feed['thumb']    = str_replace('150x150', '320x320', $each_feed['thumb']);
+        }
+
+        $data = [
             'tag_id'    => $tag_id,
             'next_feed' => action('AdminController@getMoreCorousel', array('page' => ($page + 1), 'tag_id' => $tag_id)),
             'feed'      => $feed['data']
