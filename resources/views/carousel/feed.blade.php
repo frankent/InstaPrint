@@ -98,11 +98,11 @@
             #profile_name{
                 margin: 0;
                 padding: 0px;
-                font-size: 32px;
+                font-size: 18px;
             }
 
             #post_caption{
-                font-size: 28px;
+                font-size: 16px;
             }
 
             #feed_list::-webkit-scrollbar { 
@@ -116,7 +116,7 @@
             }
 
             #profile_pic {
-                width: 110px;
+                width: 60px;
             }
 
             #feed_inside {
@@ -165,10 +165,9 @@
 
             #caption_bar {
                 background-color: rgba(0,0,0,0.7);
-                /*position: absolute;*/
-                /*bottom: 0px;*/
+                position: absolute;
+                bottom: 0px;
                 width: 100%;
-                margin-top: 10px;
             }
 
             .ins_caption{
@@ -177,7 +176,7 @@
             }
 
             #post_location_paragraph {
-                font-size: 28px;
+                font-size: 16px;
                 float: right;
             }
         </style>        
@@ -192,31 +191,31 @@
                             <div class="col-xs-10 col-xs-offset-1">
                                 <!--<h1>&nbsp;</h1>-->
                                 <div class="text-center">
-                                    <img src="<?php echo asset('img/logo.jpg'); ?>" alt="" style='width: 180px; margin-bottom: 10px;' />
+                                    <img src="<?php echo asset('img/logo.jpg'); ?>" alt="" style='width: 150px; margin-bottom: 10px;' />
                                 </div>
                                 <div class="thumbnail" style='margin-bottom: 0px'>
-                                    <div class="random_img"></div>
-                                </div>
-
-                                <div id='caption_bar'>
-                                    <div class="ins_caption">
-                                        <div class="clearfix">
-                                            <div class="pull-left" style='width: 110px; margin-right: 10px;'>
-                                                <img id="profile_pic" class="img-circle" src="" alt="" />
-                                            </div>
-                                            <div style='padding-left: 120px;'>
-                                                <p style='margin: 0;'>
-                                                    <strong id='profile_name'></strong>
-                                                    &nbsp;<span id="post_location_paragraph"><i class="fa fa-location-arrow" aria-hidden="true"></i>&nbsp;<span id="post_location">Loading...</span></span>
-                                                </p>
-                                                <p style='margin: 0;' id='post_caption'></p>
+                                    <div class="random_img">
+                                        <div id='caption_bar'>
+                                            <div class="ins_caption">
+                                                <div class="clearfix">
+                                                    <div class="pull-left" style='width: 60px; margin-right: 10px;'>
+                                                        <img id="profile_pic" class="img-circle" src="" alt="" />
+                                                    </div>
+                                                    <div style='padding-left: 70px;'>
+                                                        <p style='margin: 0;'>
+                                                            <strong id='profile_name'></strong>
+                                                            &nbsp;<span id="post_location_paragraph"><i class="fa fa-location-arrow" aria-hidden="true"></i>&nbsp;<span id="post_location">Loading...</span></span>
+                                                        </p>
+                                                        <p style='margin: 0;' id='post_caption'></p>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="text-center">
-                                    <img src="<?php echo asset('img/hash_tag_footer.jpg'); ?>" alt="" style='height: 180px; margin-top: 10px;' />
+                                    <img src="<?php echo asset('img/hash_tag_footer.jpg'); ?>" alt="" style='height: 160px; margin-top: 10px;' />
                                 </div>
                             </div>
                         </section>
