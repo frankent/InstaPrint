@@ -177,6 +177,7 @@
 
             #post_location_paragraph {
                 font-size: 16px;
+                float: right;
             }
         </style>        
 
