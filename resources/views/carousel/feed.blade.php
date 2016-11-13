@@ -191,7 +191,7 @@
                             <div class="col-xs-10 col-xs-offset-1">
                                 <!--<h1>&nbsp;</h1>-->
                                 <div class="text-center">
-                                    <img src="<?php echo asset('img/logo.jpg'); ?>" alt="" style='width: 120px;' />
+                                    <img src="<?php echo asset('img/logo.jpg'); ?>" alt="" style='width: 180px; margin-bottom: 10px;' />
                                 </div>
                                 <div class="thumbnail" style='margin-bottom: 0px'>
                                     <div class="random_img">
@@ -214,7 +214,7 @@
                                     </div>
                                 </div>
                                 <div class="text-center">
-                                    <img src="<?php echo asset('img/hash_tag_footer.jpg'); ?>" alt="" style='height: 120px;' />
+                                    <img src="<?php echo asset('img/hash_tag_footer.jpg'); ?>" alt="" style='height: 180px; margin-top: 10px;' />
                                 </div>
                             </div>
                         </section>
