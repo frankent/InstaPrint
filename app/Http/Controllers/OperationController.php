@@ -148,4 +148,47 @@ class OperationController extends Controller
 
         return true;
     }
+
+    public function getOwnMedia()
+    {
+        $alive_token = Token::where('is_active', true)->get()->toArray();
+        foreach ($alive_token as $token) {
+            $access_token = $token['token'];
+            $user_info    = $this->instagram->getUserInfo($access_token);
+            if ($user_info == false) {
+                $current_token            = Token::find($token['id']);
+                $current_token->is_active = false;
+                $current_token->save();
+            }
+
+            $all_tags = Tag::where('is_active', true)->get()->toArray();
+            $feed = $this->instagram->getOwnFeedMedia($access_token);
+            if ($feed != false) {
+                foreach ($feed['data'] as $post) {
+                    foreach ($all_tags as $tag) {
+                        $hash_tag = $tag['name'];
+                        if (in_array($hash_tag, $post['tags']) && $post['type'] == 'image') {
+                            $validate = Validator::make(array('post_id' => $post['id']), array('post_id' => 'required|unique:feed,post_id,NULL,id,tag_id,' . $tag['id']));
+                            if ($validate->passes()) {
+
+                                $feed_post                = new Feed;
+                                $feed_post->picture_s     = $post['images']['thumbnail']['url'];
+                                $feed_post->picture_m     = $post['images']['low_resolution']['url'];
+                                $feed_post->picture_l     = $post['images']['standard_resolution']['url'];
+                                $feed_post->name          = $post['user']['full_name'];
+                                $feed_post->profile_pic   = $post['user']['profile_picture'];
+                                $feed_post->caption       = empty($post['caption']) ? null : array_get($post['caption'], 'text');
+                                $feed_post->post_id       = $post['id'];
+                                $feed_post->tag_id        = $tag['id'];
+                                $feed_post->post_location = empty($post['location']) ? null : array_get($post['location'], 'name');
+                                $feed_post->save();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
 }

@@ -40,7 +40,7 @@ class Instagram extends Command
      */
     public function handle()
     {
-        if ($this->operation->getMedia() == false) {
+        if ($this->operation->getOwnMedia() == false) {
             return 'Error';
         }
     }

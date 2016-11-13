@@ -30,6 +30,17 @@ class AdminController extends Controller
         $this->instagram = new Instagram($config);
     }
 
+    public function getLogin()
+    {
+        $token = Token::where('is_active', 1)->orderBy('created_at', 'desc')->get();
+        $data  = array(
+            'authorize_link' => $this->instagram->getLoginUrl(array('basic', 'public_content')),
+            'token'          => $token->toArray()
+        );
+
+        return view('carousel.login', $data);
+    }
+
     public function getIndex()
     {
         $hash_tag = Tag::where('is_active', true)->orderBy('created_at', 'desc')->get()->toArray();

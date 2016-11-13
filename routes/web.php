@@ -9,8 +9,8 @@
   | to using a Closure or controller method. Build something great!
   |
  */
-
-Route::get('/', 'AdminController@getIndex');
+Route::get('/', 'AdminController@getLogin');
+Route::get('/ctl', 'AdminController@getIndex');
 Route::get('/token', 'AdminController@getToken');
 Route::post('/hashtag', 'OperationController@postHashtag');
 Route::get('/hashtag', 'AdminController@getHashtag');

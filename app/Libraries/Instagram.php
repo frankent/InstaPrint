@@ -110,4 +110,10 @@ class Instagram
         $url = 'https://api.instagram.com/v1/tags/' . $hash_tag . '/media/recent?access_token=' . $access_token;
         return self::getRequest($url);
     }
+
+    public function getOwnFeedMedia($access_token)
+    {
+        $url = 'https://api.instagram.com/v1/users/self/media/recent?access_token=' . $access_token;
+        return self::getRequest($url);
+    }
 }
