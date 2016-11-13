@@ -91,8 +91,7 @@ class AdminController extends Controller
         $page = Input::get('page', 1);
         $feed = Feed::select('id', 'picture_s as thumb', 'picture_l', 'name', 'post_location', 'caption', 'profile_pic')->where('tag_id', $tag_id)->paginate(9)->toArray();
         foreach ($feed['data'] as &$each_feed) {
-            $each_feed['thumb_xl'] = str_replace('150x150', '640x640', $each_feed['thumb']);
-            $each_feed['thumb']    = str_replace('150x150', '320x320', $each_feed['thumb']);
+            $each_feed['thumb'] = str_replace('150x150', '640x640', $each_feed['thumb']);
         }
 
         $tag_info = Tag::select('name')->find($tag_id)->toArray();
@@ -112,8 +111,7 @@ class AdminController extends Controller
         $tag_id = Input::get('tag_id');
         $feed   = Feed::select('id', 'picture_s as thumb', 'picture_l', 'name', 'post_location', 'caption', 'profile_pic')->where('tag_id', $tag_id)->paginate(9)->toArray();
         foreach ($feed['data'] as &$each_feed) {
-            $each_feed['thumb_xl'] = str_replace('150x150', '640x640', $each_feed['thumb']);
-            $each_feed['thumb']    = str_replace('150x150', '320x320', $each_feed['thumb']);
+            $each_feed['thumb'] = str_replace('150x150', '640x640', $each_feed['thumb']);
         }
 
         $data = [

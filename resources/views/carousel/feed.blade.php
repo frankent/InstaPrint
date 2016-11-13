@@ -214,7 +214,7 @@
                                     </div>
                                 </div>
                                 <div class="text-center">
-                                    <img src="<?php echo asset('img/hash_tag_footer.jpg'); ?>" alt="" style='height: 100px; margin-top: 5px;' />
+                                    <img src="<?php echo asset('img/hash_tag_footer.jpg'); ?>" alt="" style='height: 120px;' />
                                 </div>
                             </div>
                         </section>
