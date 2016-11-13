@@ -68,6 +68,7 @@
         <style type="text/css">
             body {
                 background-color: #fafafa;
+                overflow:hidden;
             }
 
             #all_record {
@@ -98,11 +99,20 @@
             #profile_name{
                 margin: 0;
                 padding: 0px;
-                font-size: 18px;
+                font-size: 28px;
             }
 
             #post_caption{
-                font-size: 16px;
+                font-size: 20px;
+            }
+
+            #profile_pic {
+                width: 80px;
+            }
+
+            #post_location_paragraph {
+                font-size: 20px;
+                float: right;
             }
 
             #feed_list::-webkit-scrollbar { 
@@ -113,10 +123,6 @@
                 padding-top: 20px;
                 padding-bottom: 10px;
                 margin: 0px;
-            }
-
-            #profile_pic {
-                width: 60px;
             }
 
             #feed_inside {
@@ -175,11 +181,6 @@
                 padding: 10px;
                 color: #fff;
             }
-
-            #post_location_paragraph {
-                font-size: 16px;
-                float: right;
-            }
         </style>        
 
     </head>
@@ -199,10 +200,10 @@
                                         <div id='caption_bar'>
                                             <div class="ins_caption">
                                                 <div class="clearfix">
-                                                    <div class="pull-left" style='width: 60px; margin-right: 10px;'>
+                                                    <div class="pull-left" style='width: 80px; margin-right: 10px;'>
                                                         <img id="profile_pic" class="img-circle" src="" alt="" />
                                                     </div>
-                                                    <div style='padding-left: 70px;'>
+                                                    <div style='padding-left: 90px;'>
                                                         <p style='margin: 0;'>
                                                             <strong id='profile_name'></strong>
                                                             &nbsp;<span id="post_location_paragraph"><i class="fa fa-location-arrow" aria-hidden="true"></i>&nbsp;<span id="post_location">Loading...</span></span>
