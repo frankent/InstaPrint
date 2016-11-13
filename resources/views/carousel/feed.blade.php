@@ -90,9 +90,9 @@
                 height: 95vh;
                 background-position: center;
                 background-repeat: no-repeat;
-                background-image: url("<?php echo asset('img/footer_logo.jpg'); ?>");
-                background-position: bottom left;
-                background-size: auto 80px;
+                /*                background-image: url("<?php echo asset('img/footer_logo.jpg'); ?>");
+                                background-position: bottom left;
+                                background-size: auto 80px;*/
             }
 
             #profile_name{
@@ -189,8 +189,11 @@
                     <div class="col-xs-6">
                         <section id="feed_display">
                             <div class="col-xs-10 col-xs-offset-1">
-                                <h1>&nbsp;</h1>
-                                <div class="thumbnail">
+                                <!--<h1>&nbsp;</h1>-->
+                                <div class="text-center">
+                                    <img src="<?php echo asset('img/logo.jpg'); ?>" alt="" style='width: 120px;' />
+                                </div>
+                                <div class="thumbnail" style='margin-bottom: 0px'>
                                     <div class="random_img">
                                         <div id='caption_bar'>
                                             <div class="ins_caption">
@@ -210,6 +213,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="text-center">
+                                    <img src="<?php echo asset('img/hash_tag_footer.jpg'); ?>" alt="" style='height: 100px; margin-top: 5px;' />
+                                </div>
                             </div>
                         </section>
                     </div>
@@ -217,14 +223,9 @@
                         <section id="feed_list" data-next-feed="<?php echo $next_feed; ?>">
                             <div id="feed_inside">
                                 <div id="scroller">
-                                    <div class="text-center">
-                                        <img style="height: 59px; margin-bottom: 10px;" src="<?php echo asset('img/hash_tag.jpg'); ?>" alt="" />
-                                        <!--<h1 class="text-center"><?php echo '#' . $tag_name ?></h1>-->
-                                    </div>
+                                    <h1>&nbsp;</h1>
                                     <div class="row" id="all_record"></div>
-                                    <div class="row">
-                                        <h1 class="text-center" style="padding: 5px 0;">#End</h1>
-                                    </div>
+                                    <hr />
                                 </div>
                             </div>
                         </section>
