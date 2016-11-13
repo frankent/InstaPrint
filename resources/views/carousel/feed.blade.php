@@ -63,6 +63,7 @@
         <script src="<?php echo asset('plugins/fastclick/fastclick.js') ?>"></script>
         <!-- AdminLTE App -->
         <script src="<?php echo asset('dist/js/app.min.js') ?>"></script>
+        <script src="<?php echo asset('js/jquery.nicescroll.min.js') ?>"></script>
 
         <style type="text/css">
             body {
@@ -137,6 +138,7 @@
 
         <script type="text/javascript">
             var feed_key = {};
+            $('#feed_list').niceScroll();
             function frame(each_feed) {
                 var html = '<div class="col-xs-4" style="display:none;" id="feed-' + each_feed.id + '">\n\
                             <div class="thumbnail" data-profile_pic="' + each_feed.profile_pic + '" data-picture="' + each_feed.picture_l + '" data-name="' + each_feed.name + '" data-location="' + each_feed.post_location + '">\n\
