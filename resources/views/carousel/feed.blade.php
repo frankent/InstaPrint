@@ -70,6 +70,11 @@
                 background-color: #fafafa;
             }
 
+            #all_record {
+                margin-right: -10px;
+                margin-left: -10px;
+            }
+
             #frame_slide {
                 /*background-color: #000;*/
                 height: 100vh;
@@ -85,15 +90,19 @@
                 height: 95vh;
                 background-position: center;
                 background-repeat: no-repeat;
+                background-image: url("<?php echo asset('img/footer_logo.jpg'); ?>");
+                background-position: bottom left;
+                background-size: auto 80px;
             }
 
             #profile_name{
                 margin: 0;
                 padding: 0px;
+                font-size: 18px;
             }
 
             #post_caption{
-                font-size: 25px;
+                font-size: 16px;
             }
 
             #feed_list::-webkit-scrollbar { 
@@ -106,6 +115,9 @@
                 margin: 0px;
             }
 
+            #profile_pic {
+                width: 60px;
+            }
 
             #feed_inside {
                 position: absolute;
@@ -139,7 +151,32 @@
                 -ms-text-size-adjust: none;
                 -o-text-size-adjust: none;
                 text-size-adjust: none;
-                padding: 0 15px 0 0;
+                padding: 0 30px 0 0;
+            }
+
+            .random_img {
+                background-color: #000;
+                background-position: center;
+                background-size: cover;
+                display: block;
+                margin: 10px 10px;
+                position: relative;
+            }
+
+            #caption_bar {
+                background-color: rgba(0,0,0,0.7);
+                position: absolute;
+                bottom: 0px;
+                width: 100%;
+            }
+
+            .ins_caption{
+                padding: 10px;
+                color: #fff;
+            }
+
+            #post_location_paragraph {
+                font-size: 16px;
             }
         </style>        
 
@@ -150,14 +187,39 @@
                 <div class="row">
                     <div class="col-xs-6">
                         <section id="feed_display">
-
+                            <div class="col-xs-10 col-xs-offset-1">
+                                <h1>&nbsp;</h1>
+                                <div class="thumbnail">
+                                    <div class="random_img">
+                                        <div id='caption_bar'>
+                                            <div class="ins_caption">
+                                                <div class="clearfix">
+                                                    <div class="pull-left" style='width: 60px; margin-right: 10px;'>
+                                                        <img id="profile_pic" class="img-circle" src="" alt="" />
+                                                    </div>
+                                                    <div style='padding-left: 70px;'>
+                                                        <p style='margin: 0;'>
+                                                            <strong id='profile_name'></strong>
+                                                            &nbsp;<span id="post_location_paragraph"><i class="fa fa-location-arrow" aria-hidden="true"></i>&nbsp;<span id="post_location">Loading...</span></span>
+                                                        </p>
+                                                        <p style='margin: 0;' id='post_caption'></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </section>
                     </div>
                     <div class="col-xs-6">
                         <section id="feed_list" data-next-feed="<?php echo $next_feed; ?>">
                             <div id="feed_inside">
                                 <div id="scroller">
-                                    <h1 class="text-center"><?php echo '#' . $tag_name ?></h1>
+                                    <div class="text-center">
+                                        <img style="height: 59px; margin-bottom: 10px;" src="<?php echo asset('img/hash_tag.jpg'); ?>" alt="" />
+                                        <!--<h1 class="text-center"><?php echo '#' . $tag_name ?></h1>-->
+                                    </div>
                                     <div class="row" id="all_record"></div>
                                     <div class="row">
                                         <h1 class="text-center" style="padding: 5px 0;">#End</h1>
@@ -176,8 +238,11 @@
 
         <script type="text/javascript">
             var feed_key = {};
+            var slide = [];
+            var index = 0;
+
             function frame(each_feed) {
-                var html = '<div class="col-xs-4" style="display:none;" id="feed-' + each_feed.id + '">\n\
+                var html = '<div class="col-xs-4" style="display:none; padding-left:10px; padding-right: 10px;" id="feed-' + each_feed.id + '">\n\
                             <div class="thumbnail" data-profile_pic="' + each_feed.profile_pic + '" data-picture="' + each_feed.picture_l + '" data-name="' + each_feed.name + '" data-location="' + each_feed.post_location + '">\n\
                             <img class="img-responsive" src="' + each_feed.thumb + '">\n\
                             <textarea class="hidden">' + each_feed.caption + '</textarea>\n\
@@ -186,8 +251,31 @@
                 return html;
             }
 
+            function slideShow() {
+                var total = slide.length;
+                index = index % total;
+                var r_index = total - (index + 1);
+                var current_slide = slide[r_index];
+                index++;
+
+                var img_slide = current_slide['picture_l'];
+                $('.random_img').fadeOut(function () {
+                    $('#profile_name').text(current_slide['name']);
+                    $('#profile_pic').attr('src', current_slide['profile_pic']);
+                    $('#post_caption').text(current_slide['caption']);
+
+                    if (current_slide['post_location']) {
+                        $('#post_location').text(current_slide['post_location']);
+                        $('#post_location_paragraph').show();
+                    } else {
+                        $('#post_location_paragraph').hide();
+                    }
+
+                    $(this).css({'background-image': 'url("' + img_slide + '")'}).fadeIn();
+                });
+            }
+
             $(function () {
-                var slide = [];
                 var feed = $('#slide_temp').text();
                 feed = JSON.parse(feed);
                 $.each(feed, function (i, v) {
@@ -197,8 +285,14 @@
                     slide.push(v);
                 });
 
+                slideShow();
+                setInterval(function () {
+                    slideShow();
+                }, 10000);
+
                 setInterval(function () {
                     var url = $('#feed_list').data('next-feed');
+                    var new_entry = false;
                     $.get(url, function (res) {
                         if (res.feed.length > 0) {
                             $.each(res.feed, function (i, v) {
@@ -207,6 +301,7 @@
                                     $('#all_record').prepend(frame(v));
                                     $('#feed-' + v.id).fadeIn();
                                     slide.push(v);
+                                    new_entry = true;
                                 }
                             });
 
@@ -214,17 +309,23 @@
                                 $('#feed_list').data('next-feed', res.next_feed);
                             }
 
-                            setTimeout(function () {
-                                new IScroll('#feed_inside');
-                            }, 1000);
+                            if (new_entry == true) {
+                                index = 0;
+                                setTimeout(function () {
+                                    new IScroll('#feed_inside');
+                                }, 1000);
+                            }
                         }
                     }, 'json');
                 }, 15000);
+            });
 
+            $(window).load(function () {
                 setTimeout(function () {
                     new IScroll('#feed_inside');
+                    var slide_width = $('.random_img').width();
+                    $('.random_img').height(slide_width);
                 }, 1000);
-
             });
         </script>
     </body>
