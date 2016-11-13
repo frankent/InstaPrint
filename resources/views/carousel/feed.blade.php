@@ -158,6 +158,7 @@
                 background-color: #000;
                 background-position: center;
                 background-size: contain;
+                background-repeat: no-repeat;
                 display: block;
                 margin: 10px 10px;
                 position: relative;
