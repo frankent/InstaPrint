@@ -157,7 +157,7 @@
             .random_img {
                 background-color: #000;
                 background-position: center;
-                background-size: cover;
+                background-size: contain;
                 display: block;
                 margin: 10px 10px;
                 position: relative;
