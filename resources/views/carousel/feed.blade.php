@@ -63,7 +63,7 @@
         <script src="<?php echo asset('plugins/fastclick/fastclick.js') ?>"></script>
         <!-- AdminLTE App -->
         <script src="<?php echo asset('dist/js/app.min.js') ?>"></script>
-        <script src="<?php echo asset('js/jquery.nicescroll.min.js') ?>"></script>
+        <script src="<?php echo asset('js/iscroll.js') ?>"></script>
 
         <style type="text/css">
             body {
@@ -78,8 +78,6 @@
             #feed_list {
                 /*background-color: #fff;*/
                 height: 95vh;
-                overflow-x: hidden;
-                overflow-y: scroll;
             }
 
             #feed_display {
@@ -107,6 +105,42 @@
                 padding-bottom: 10px;
                 margin: 0px;
             }
+
+
+            #feed_inside {
+                position: absolute;
+                z-index: 1;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                width: 100%;
+                /*background: #ccc;*/
+                overflow: hidden;
+            }
+
+            #scroller {
+                position: absolute;
+                z-index: 1;
+                -webkit-tap-highlight-color: rgba(0,0,0,0);
+                width: 100%;
+                -webkit-transform: translateZ(0);
+                -moz-transform: translateZ(0);
+                -ms-transform: translateZ(0);
+                -o-transform: translateZ(0);
+                transform: translateZ(0);
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+                -webkit-text-size-adjust: none;
+                -moz-text-size-adjust: none;
+                -ms-text-size-adjust: none;
+                -o-text-size-adjust: none;
+                text-size-adjust: none;
+                padding: 0 15px 0 0;
+            }
         </style>        
 
     </head>
@@ -121,10 +155,14 @@
                     </div>
                     <div class="col-xs-6">
                         <section id="feed_list" data-next-feed="<?php echo $next_feed; ?>">
-                            <h1 class="text-center"><?php echo '#' . $tag_name ?></h1>
-                            <div class="row"></div>
-                            <div class="row">
-                                <h1 class="text-center" style="padding: 5px 0;">#End</h1>
+                            <div id="feed_inside">
+                                <div id="scroller">
+                                    <h1 class="text-center"><?php echo '#' . $tag_name ?></h1>
+                                    <div class="row" id="all_record"></div>
+                                    <div class="row">
+                                        <h1 class="text-center" style="padding: 5px 0;">#End</h1>
+                                    </div>
+                                </div>
                             </div>
                         </section>
                     </div>
@@ -138,7 +176,6 @@
 
         <script type="text/javascript">
             var feed_key = {};
-            $('#feed_list').niceScroll();
             function frame(each_feed) {
                 var html = '<div class="col-xs-4" style="display:none;" id="feed-' + each_feed.id + '">\n\
                             <div class="thumbnail" data-profile_pic="' + each_feed.profile_pic + '" data-picture="' + each_feed.picture_l + '" data-name="' + each_feed.name + '" data-location="' + each_feed.post_location + '">\n\
@@ -150,12 +187,14 @@
             }
 
             $(function () {
+                var slide = [];
                 var feed = $('#slide_temp').text();
                 feed = JSON.parse(feed);
                 $.each(feed, function (i, v) {
                     feed_key['s' + v.id] = true;
                     $('#feed_list').find('.row').prepend(frame(v));
                     $('#feed-' + v.id).fadeIn(500);
+                    slide.push(v);
                 });
 
                 setInterval(function () {
@@ -165,17 +204,27 @@
                             $.each(res.feed, function (i, v) {
                                 if (!feed_key.hasOwnProperty('s' + v.id)) {
                                     feed_key['s' + v.id] = true;
-                                    $('#feed_list').find('.row').prepend(frame(v));
+                                    $('#all_record').prepend(frame(v));
                                     $('#feed-' + v.id).fadeIn();
+                                    slide.push(v);
                                 }
                             });
 
                             if (res.feed.length == 9) {
                                 $('#feed_list').data('next-feed', res.next_feed);
                             }
+
+                            setTimeout(function () {
+                                new IScroll('#feed_inside');
+                            }, 1000);
                         }
                     }, 'json');
                 }, 15000);
+
+                setTimeout(function () {
+                    new IScroll('#feed_inside');
+                }, 1000);
+
             });
         </script>
     </body>
