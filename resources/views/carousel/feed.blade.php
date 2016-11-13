@@ -98,11 +98,11 @@
             #profile_name{
                 margin: 0;
                 padding: 0px;
-                font-size: 18px;
+                font-size: 32px;
             }
 
             #post_caption{
-                font-size: 16px;
+                font-size: 28px;
             }
 
             #feed_list::-webkit-scrollbar { 
@@ -116,7 +116,7 @@
             }
 
             #profile_pic {
-                width: 60px;
+                width: 110px;
             }
 
             #feed_inside {
@@ -168,6 +168,7 @@
                 position: absolute;
                 bottom: 0px;
                 width: 100%;
+                margin-top: 10px;
             }
 
             .ins_caption{
@@ -176,7 +177,7 @@
             }
 
             #post_location_paragraph {
-                font-size: 16px;
+                font-size: 28px;
                 float: right;
             }
         </style>        
@@ -194,25 +195,26 @@
                                     <img src="<?php echo asset('img/logo.jpg'); ?>" alt="" style='width: 180px; margin-bottom: 10px;' />
                                 </div>
                                 <div class="thumbnail" style='margin-bottom: 0px'>
-                                    <div class="random_img">
-                                        <div id='caption_bar'>
-                                            <div class="ins_caption">
-                                                <div class="clearfix">
-                                                    <div class="pull-left" style='width: 60px; margin-right: 10px;'>
-                                                        <img id="profile_pic" class="img-circle" src="" alt="" />
-                                                    </div>
-                                                    <div style='padding-left: 70px;'>
-                                                        <p style='margin: 0;'>
-                                                            <strong id='profile_name'></strong>
-                                                            &nbsp;<span id="post_location_paragraph"><i class="fa fa-location-arrow" aria-hidden="true"></i>&nbsp;<span id="post_location">Loading...</span></span>
-                                                        </p>
-                                                        <p style='margin: 0;' id='post_caption'></p>
-                                                    </div>
-                                                </div>
+                                    <div class="random_img"></div>
+                                </div>
+
+                                <div id='caption_bar'>
+                                    <div class="ins_caption">
+                                        <div class="clearfix">
+                                            <div class="pull-left" style='width: 110px; margin-right: 10px;'>
+                                                <img id="profile_pic" class="img-circle" src="" alt="" />
+                                            </div>
+                                            <div style='padding-left: 120px;'>
+                                                <p style='margin: 0;'>
+                                                    <strong id='profile_name'></strong>
+                                                    &nbsp;<span id="post_location_paragraph"><i class="fa fa-location-arrow" aria-hidden="true"></i>&nbsp;<span id="post_location">Loading...</span></span>
+                                                </p>
+                                                <p style='margin: 0;' id='post_caption'></p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="text-center">
                                     <img src="<?php echo asset('img/hash_tag_footer.jpg'); ?>" alt="" style='height: 180px; margin-top: 10px;' />
                                 </div>
