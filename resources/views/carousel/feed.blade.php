@@ -165,8 +165,8 @@
 
             #caption_bar {
                 background-color: rgba(0,0,0,0.7);
-                position: absolute;
-                bottom: 0px;
+                /*position: absolute;*/
+                /*bottom: 0px;*/
                 width: 100%;
                 margin-top: 10px;
             }
