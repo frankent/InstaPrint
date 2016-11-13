@@ -34,7 +34,7 @@ class AdminController extends Controller
     {
         $token = Token::where('is_active', 1)->orderBy('created_at', 'desc')->get();
         $data  = array(
-            'authorize_link' => $this->instagram->getLoginUrl(array('basic', 'public_content')),
+            'authorize_link' => $this->instagram->getLoginUrl(array('basic')),
             'token'          => $token->toArray()
         );
 
@@ -59,7 +59,7 @@ class AdminController extends Controller
     {
         $token = Token::orderBy('created_at', 'desc')->get();
         $data  = array(
-            'authorize_link' => $this->instagram->getLoginUrl(array('basic', 'public_content')),
+            'authorize_link' => $this->instagram->getLoginUrl(array('basic')),
             'token'          => $token->toArray()
         );
         return view('admin.token', $data);

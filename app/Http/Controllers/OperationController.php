@@ -33,7 +33,7 @@ class OperationController extends Controller
 
     public function getIndex()
     {
-        return ['url' => $this->instagram->getLoginUrl(array('basic', 'public_content'))];
+        return ['url' => $this->instagram->getLoginUrl(array('basic'))];
     }
 
     public function getCallback()
@@ -42,7 +42,7 @@ class OperationController extends Controller
         $resp = $this->instagram->getAccessToken($code);
 
         if ($resp == false) {
-            return redirect()->action('AdminController@getToken')->with('status', 'token_error');
+            return redirect()->action('AdminController@getLogin')->with('status', 'token_error');
         }
 
         Log::info($resp);
@@ -54,7 +54,7 @@ class OperationController extends Controller
         $token->picture   = $resp['user']['profile_picture'];
         $token->save();
 
-        return redirect()->action('AdminController@getToken')->with('status', 'token_add_success');
+        return redirect()->action('AdminController@getLogin')->with('status', 'token_add_success');
     }
 
     public function getDisbleToken()

@@ -78,7 +78,25 @@
             <div class="content">
                 <div class="row">
                     <div class="col-sm-4 col-sm-offset-4">
-                        <h2 style='padding: 15px 0; margin: 0px;'>Please login to share your moment with our Beloved</h2>
+                        <?php if (session('status')): ?>
+                            <?php if (session('status') == 'token_add_success') : ?>
+                                <div class="callout callout-info">
+                                    <h4>Success!</h4>
+                                    <p>Thank you to join us !!</p>
+                                </div>
+                            <?php elseif (session('status') == 'token_error'): ?>
+                                <div class="callout callout-danger">
+                                    <h4>Warning!</h4>
+                                    <p>Something error</p>
+                                </div>
+                            <?php endif; ?>
+                        <?php endif; ?>
+
+                        <h2 style='padding: 15px 0; margin: 0px;'>Please login to share your moment with our event</h2>
+                        <p>
+                            <img src="{{asset('img/qr.png')}}" alt="" />
+                        </p>
+                        <p>Or</p>
                         <p>
                             <a href="<?php echo $authorize_link; ?>" class="btn btn-flat btn-social btn-instagram">
                                 <i class="fa fa-instagram"></i> Sign in with Instagram
