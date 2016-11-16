@@ -94,7 +94,7 @@
 
                         <h2 style='padding: 15px 0; margin: 0px;'>Please login to share your moment with our event</h2>
                         <p>
-                            <img src="{{asset('img/static_qr_code_without_logo.jpg')}}" alt="" />
+                            <img style="width:200px;" src="{{asset('img/static_qr_code_without_logo.jpg')}}" alt="" />
                         </p>
                         <p>Or</p>
                         <p>
