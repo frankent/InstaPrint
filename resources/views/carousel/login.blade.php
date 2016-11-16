@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>AdminLTE 2 | Dashboard</title>
+        <title>Feed Carousel | Instagram Image Slider</title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <!-- Bootstrap 3.3.6 -->
@@ -94,7 +94,7 @@
 
                         <h2 style='padding: 15px 0; margin: 0px;'>Please login to share your moment with our event</h2>
                         <p>
-                            <img src="{{asset('img/qr.png')}}" alt="" />
+                            <img src="{{asset('img/static_qr_code_without_logo.jpg')}}" alt="" />
                         </p>
                         <p>Or</p>
                         <p>
