@@ -249,7 +249,7 @@
             function frame(each_feed) {
                 var html = '<div class="col-xs-4" style="display:none; padding-left:10px; padding-right: 10px;" id="feed-' + each_feed.id + '">\n\
                             <div class="thumbnail" data-profile_pic="' + each_feed.profile_pic + '" data-picture="' + each_feed.picture_l + '" data-name="' + each_feed.name + '" data-location="' + each_feed.post_location + '">\n\
-                            <img class="img-responsive" src="' + each_feed.thumb + '">\n\
+                            <img style="width:100%;" class="img-responsive" src="' + each_feed.thumb + '">\n\
                             <textarea class="hidden">' + each_feed.caption + '</textarea>\n\
                             </div>\n\
                             </div>';
