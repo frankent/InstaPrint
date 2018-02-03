@@ -107,8 +107,29 @@ class Instagram
 
     public function getHashTagMedia($hash_tag, $access_token)
     {
-        $url = 'https://api.instagram.com/v1/tags/' . $hash_tag . '/media/recent?access_token=' . $access_token;
-        return self::getRequest($url);
+        # $url = 'https://api.instagram.com/v1/tags/' . $hash_tag . '/media/recent?access_token=' . $access_token;
+        # return self::getRequest($url);
+        # Initial Feed
+
+        $feedInScope = [];
+        $timeInfocus = date('U') - 86400; // Focus only 1 day
+        $shouldGoToNextPage = true;
+        $nextPageLink = null;
+
+        do {
+            $recentFeed = $nextPageLink ? self::getRequest($nextPageLink) : self::getOwnFeedMedia($access_token);
+            $nextPageLink = $recentFeed['pagination']['next_url'];
+            foreach ($recentFeed['data'] as $eachPost) {
+                if (!empty($eachPost['caption']) && preg_match('/(#' . $hash_tag . ')/', $eachPost['caption']) && $eachPost['created_time'] > $timeInfocus) {
+                    $feedInScope[] = $eachPost;
+                } else if ($eachPost['created_time'] <= $timeInfocus) {
+                    $shouldGoToNextPage = false;
+                }
+            }
+
+        } while($shouldGoToNextPage);
+
+        return $feedInScope;
     }
 
     public function getOwnFeedMedia($access_token)
