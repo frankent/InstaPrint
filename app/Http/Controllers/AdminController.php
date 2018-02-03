@@ -101,9 +101,9 @@ class AdminController extends Controller
     {
         $page = Input::get('page', 1);
         $feed = Feed::select('id', 'picture_s as thumb', 'picture_l', 'name', 'post_location', 'caption', 'profile_pic')->where('tag_id', $tag_id)->paginate(9)->toArray();
-        foreach ($feed['data'] as &$each_feed) {
-            $each_feed['thumb'] = str_replace('150x150', '640x640', $each_feed['thumb']);
-        }
+//        foreach ($feed['data'] as &$each_feed) {
+//            $each_feed['thumb'] = str_replace('150x150', '640x640', $each_feed['thumb']);
+//        }
 
         $tag_info = Tag::select('name')->find($tag_id)->toArray();
 
