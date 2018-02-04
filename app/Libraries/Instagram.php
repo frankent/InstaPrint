@@ -168,7 +168,7 @@ class Instagram
                         'full_name' => '',
                         'profile_picture' => ''
                     ],
-                    'caption' => $postData['edge_media_to_caption']['edges'][0]['node']['text'],
+                    'caption' => empty($postData['edge_media_to_caption']['edges']) ? null : $postData['edge_media_to_caption']['edges'][0]['node'],
                     'location' => '',
                     'is_video' => $postData['is_video'],
                     'shortcode' => $postData['shortcode'],
