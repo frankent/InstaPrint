@@ -175,6 +175,8 @@ class Instagram
                 ];
             }
         }
+
+        return $feedInFocus;
     }
 
     public function getPublicUserProfile($shortcode) {
