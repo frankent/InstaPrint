@@ -134,7 +134,7 @@ class Instagram
 
     public function getPublicHashTag($hash_tag) {
 
-        $timeInfocus = date('U') - 86400; // Focus only 1 day
+//        $timeInfocus = date('U') - 86400; // Focus only 1 day
         $url = 'https://www.instagram.com/explore/tags/' . $hash_tag . '/?__a=1';
 
         // $nextPage = 'https://www.instagram.com/graphql/query/?query_hash=298b92c8d7cad703f7565aa892ede943&variables={%22tag_name%22:%22thailand%22,%22first%22:2,%22after%22:%22J0HWnYlHgAAAF0HWnYjpgAAAFnIA%22}'
@@ -150,30 +150,30 @@ class Instagram
 
         foreach ($allData as $post) {
             $postData = $post['node'];
-            if ($postData['taken_at_timestamp'] >= $timeInfocus) {
-                $feedInFocus[] = [
-                    'id' => $postData['id'],
-                    'images' => [
-                        'thumbnail' => [
-                            'url' => $postData['thumbnail_resources'][0]['src']
-                        ],
-                        'low_resolution' => [
-                            'url' => $postData['thumbnail_src']
-                        ],
-                        'standard_resolution' => [
-                            'url' => $postData['display_url']
-                        ]
+//            if ($postData['taken_at_timestamp'] >= $timeInfocus) {
+            $feedInFocus[] = [
+                'id' => $postData['id'],
+                'images' => [
+                    'thumbnail' => [
+                        'url' => $postData['thumbnail_resources'][0]['src']
                     ],
-                    'user' => [
-                        'full_name' => '',
-                        'profile_picture' => ''
+                    'low_resolution' => [
+                        'url' => $postData['thumbnail_src']
                     ],
-                    'caption' => empty($postData['edge_media_to_caption']['edges']) ? null : $postData['edge_media_to_caption']['edges'][0]['node'],
-                    'location' => '',
-                    'is_video' => $postData['is_video'],
-                    'shortcode' => $postData['shortcode'],
-                ];
-            }
+                    'standard_resolution' => [
+                        'url' => $postData['display_url']
+                    ]
+                ],
+                'user' => [
+                    'full_name' => '',
+                    'profile_picture' => ''
+                ],
+                'caption' => empty($postData['edge_media_to_caption']['edges']) ? null : $postData['edge_media_to_caption']['edges'][0]['node'],
+                'location' => '',
+                'is_video' => $postData['is_video'],
+                'shortcode' => $postData['shortcode'],
+            ];
+//            }
         }
 
         return $feedInFocus;
