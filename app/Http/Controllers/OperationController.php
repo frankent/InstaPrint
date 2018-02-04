@@ -124,22 +124,25 @@ class OperationController extends Controller
         $all_tags = Tag::where('is_active', true)->get()->toArray();
         foreach ($all_tags as $tag) {
             $hash_tag = $tag['name'];
-            $feed     = $this->instagram->getHashTagMedia($hash_tag, $access_token);
+//            $feed     = $this->instagram->getHashTagMedia($hash_tag, $access_token);
+            $feed     = $this->instagram->getPublicHashTag($hash_tag);
             if (!empty($feed)) {
                 foreach ($feed as $post) {
                     $validate = Validator::make(array('post_id' => $post['id']), array('post_id' => 'required|unique:feed,post_id,NULL,id,tag_id,' . $tag['id']));
-                    if ($validate->passes()) {
+                    if ($validate->passes() && $post['is_video'] === false) {
+
+                        $userProfile = $this->instagram->getPublicUserProfile($post['shortcode']);
 
                         $feed_post                = new Feed;
                         $feed_post->picture_s     = $post['images']['thumbnail']['url'];
                         $feed_post->picture_m     = $post['images']['low_resolution']['url'];
                         $feed_post->picture_l     = $post['images']['standard_resolution']['url'];
-                        $feed_post->name          = $post['user']['full_name'];
-                        $feed_post->profile_pic   = $post['user']['profile_picture'];
+                        $feed_post->name          = $userProfile['graphql']['shortcode_media']['owner']['full_name'];
+                        $feed_post->profile_pic   = $userProfile['graphql']['shortcode_media']['owner']['profile_pic_url'];
                         $feed_post->caption       = empty($post['caption']) ? null : array_get($post['caption'], 'text');
                         $feed_post->post_id       = $post['id'];
                         $feed_post->tag_id        = $tag['id'];
-                        $feed_post->post_location = empty($post['location']) ? null : array_get($post['location'], 'name');
+                        $feed_post->post_location = empty($userProfile['graphql']['shortcode_media']['location']) ? null : $userProfile['graphql']['shortcode_media']['location']['name'];
                         $feed_post->save();
                     }
                 }
