@@ -106,26 +106,27 @@ class OperationController extends Controller
 
     public function getMedia()
     {
-        $alive_token = Token::where('is_active', true)->get()->toArray();
-
-        if (empty($alive_token)) {
-            return false;
-        }
-
-        $token        = $alive_token[array_rand($alive_token)];
-        $access_token = $token['token'];
-        $user_info    = $this->instagram->getUserInfo($access_token);
-        if ($user_info == false) {
-            $current_token            = Token::find($token['id']);
-            $current_token->is_active = false;
-            $current_token->save();
-        }
+//        $alive_token = Token::where('is_active', true)->get()->toArray();
+//
+//        if (empty($alive_token)) {
+//            return false;
+//        }
+//
+//        $token        = $alive_token[array_rand($alive_token)];
+//        $access_token = $token['token'];
+//        $user_info    = $this->instagram->getUserInfo($access_token);
+//        if ($user_info == false) {
+//            $current_token            = Token::find($token['id']);
+//            $current_token->is_active = false;
+//            $current_token->save();
+//        }
 
         $all_tags = Tag::where('is_active', true)->get()->toArray();
         foreach ($all_tags as $tag) {
             $hash_tag = $tag['name'];
 //            $feed     = $this->instagram->getHashTagMedia($hash_tag, $access_token);
             $feed     = $this->instagram->getPublicHashTag($hash_tag);
+
             if (!empty($feed)) {
                 foreach ($feed as $post) {
                     $validate = Validator::make(array('post_id' => $post['id']), array('post_id' => 'required|unique:feed,post_id,NULL,id,tag_id,' . $tag['id']));

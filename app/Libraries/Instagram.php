@@ -155,7 +155,7 @@ class Instagram
                     'id' => $postData['id'],
                     'images' => [
                         'thumbnail' => [
-                            'url' => $postData['thumbnail_resources'][0]['url']
+                            'url' => $postData['thumbnail_resources'][0]['src']
                         ],
                         'low_resolution' => [
                             'url' => $postData['thumbnail_src']

@@ -48,7 +48,7 @@
                             </div>
                         </div>
                         <div class="box-body">
-                            <img src="<?php echo str_replace('150x150', '640x640', $each_feed['picture_s']); ?>" alt="" class="img-responsive" />
+                            <img src="<?php echo $each_feed['picture_s']; ?>" alt="" class="img-responsive" />
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer">
