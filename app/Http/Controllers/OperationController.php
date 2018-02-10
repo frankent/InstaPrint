@@ -15,6 +15,9 @@ use App\Models\Tag;
 use App\Models\Token;
 use App\Models\Feed;
 
+# use Imagick;
+# use ImagickDraw;
+
 /**
  * Description of OperationController
  *
@@ -242,14 +245,14 @@ class OperationController extends Controller
          * Imagick operate
          */
         echo "Creating image" . PHP_EOL;
-        $frame = new Imagick();
+        $frame = new \Imagick();
         $frame->newimage(1200, 1800, "#ffffff");
 
-        $profile_imagick = new Imagick();
+        $profile_imagick = new \Imagick();
         $profile_imagick->readimageblob($profile_blob);
         $profile_imagick->resizeimage(250, 250, Imagick::FILTER_CATROM, 1);
 
-        $post_imagick = new Imagick();
+        $post_imagick = new \Imagick();
         $post_imagick->readimageblob($post_blob);
         $dim = $post_imagick->getImageGeometry();
 
@@ -280,7 +283,7 @@ class OperationController extends Controller
         /**
          * caption
          */
-        $caption_imagick = new Imagick();
+        $caption_imagick = new \Imagick();
         $caption_imagick->setFont($font);
         $caption_imagick->setPointSize(50);
         $caption_imagick->newPseudoImage(1000, 250, "caption:{$caption}");
