@@ -145,6 +145,15 @@ class OperationController extends Controller
                         $feed_post->tag_id        = $tag['id'];
                         $feed_post->post_location = empty($userProfile['graphql']['shortcode_media']['location']) ? null : $userProfile['graphql']['shortcode_media']['location']['name'];
                         $feed_post->save();
+
+                        // create image
+                        $this->createImage([
+                            'id' => $post['id'],
+                            'img_url' => $post['images']['standard_resolution']['url'],
+                            'caption' => empty($post['caption']) ? null : array_get($post['caption'], 'text'),
+                            'username' => $userProfile['graphql']['shortcode_media']['owner']['full_name'],
+                            'profile_pic' => $userProfile['graphql']['shortcode_media']['owner']['profile_pic_url']
+                        ]);
                     }
                 }
             }
