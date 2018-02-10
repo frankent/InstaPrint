@@ -174,7 +174,6 @@ class OperationController extends Controller
                         if (in_array($hash_tag, $post['tags']) && $post['type'] == 'image') {
                             $validate = Validator::make(array('post_id' => $post['id']), array('post_id' => 'required|unique:feed,post_id,NULL,id,tag_id,' . $tag['id']));
                             if ($validate->passes()) {
-
                                 $feed_post                = new Feed;
                                 $feed_post->picture_s     = $post['images']['thumbnail']['url'];
                                 $feed_post->picture_m     = $post['images']['low_resolution']['url'];
@@ -186,6 +185,15 @@ class OperationController extends Controller
                                 $feed_post->tag_id        = $tag['id'];
                                 $feed_post->post_location = empty($post['location']) ? null : array_get($post['location'], 'name');
                                 $feed_post->save();
+
+                                // create image
+                                $this->createImage([
+                                    'id' => $post['id'],
+                                    'img_url' => $post['images']['standard_resolution']['url'],
+                                    'caption' => empty($post['caption']) ? null : array_get($post['caption'], 'text'),
+                                    'username' => $post['user']['full_name'],
+                                    'profile_pic' => $post['user']['profile_picture']
+                                ]);
                             }
                         }
                     }
@@ -194,5 +202,96 @@ class OperationController extends Controller
         }
 
         return true;
+    }
+
+    private function createImage($data)
+    {
+        $id = $data['id'];
+        $img_url = $data['img_url'];
+        $caption = $data['caption'];
+        $username = $data['username'];
+        $profile_pic = $data['profile_pic'];
+
+        $font = public_path("font/SukhumvitSet.ttc");
+        $save_path = public_path("image/{$id}.jpg");
+        $arrContextOptions = array(
+            "ssl" => array(
+                "verify_peer" => false,
+                "verify_peer_name" => false,
+            ),
+        );
+
+        echo PHP_EOL . "Process Post Ids: {$id} by {$username}" . PHP_EOL;
+
+        echo "Getting Profile Picture" . PHP_EOL;
+        $profile_blob = file_get_contents($profile_pic, false, stream_context_create($arrContextOptions));
+
+        echo "Getting Post Picture" . PHP_EOL;
+        $post_blob = file_get_contents($img_url, false, stream_context_create($arrContextOptions));
+
+        /**
+         * Imagick operate
+         */
+        echo "Creating image" . PHP_EOL;
+        $frame = new Imagick();
+        $frame->newimage(1200, 1800, "#ffffff");
+
+        $profile_imagick = new Imagick();
+        $profile_imagick->readimageblob($profile_blob);
+        $profile_imagick->resizeimage(250, 250, Imagick::FILTER_CATROM, 1);
+
+        $post_imagick = new Imagick();
+        $post_imagick->readimageblob($post_blob);
+        $dim = $post_imagick->getImageGeometry();
+
+        $post_imagick->scaleimage(1100, 1100, 1);
+
+        $dim = $post_imagick->getImageGeometry();
+
+        $frame->compositeimage($profile_imagick, Imagick::COMPOSITE_DEFAULT, 50, 50);
+
+        $offset_x = (1100 - $dim["width"]) / 2;
+        $offset_y = (1100 - $dim["height"]) / 2;
+
+
+        $frame->compositeimage($post_imagick, Imagick::COMPOSITE_DEFAULT, (50 + $offset_x), (350 + $offset_y));
+
+        $draw = new \ImagickDraw();
+        $draw->setfont($font);
+        $draw->setGravity(Imagick::GRAVITY_NORTHWEST);
+        $draw->setfontsize(70);
+        $draw->setfontstyle(2);
+        $draw->setfillcolor("#000000");
+        $draw->setfontweight(900);
+        $draw->setStrokeWidth(2);
+        $draw->setstrokecolor("#000000");
+
+        $frame->annotateimage($draw, 350, 100, 0, $username);
+
+        /**
+         * caption
+         */
+        $caption_imagick = new Imagick();
+        $caption_imagick->setFont($font);
+        $caption_imagick->setPointSize(50);
+        $caption_imagick->newPseudoImage(1000, 250, "caption:{$caption}");
+        $frame->compositeimage($caption_imagick, Imagick::COMPOSITE_DEFAULT, 50, 1500);
+
+//                $draw->setfontsize(50);
+//                $draw->setStrokeWidth(1);
+//                $draw->setfillcolor("#999999");
+//                $draw->setstrokecolor("#999999");
+//
+//                $frame->annotateimage($draw, 50, 1550, 0, $caption);
+
+
+        $frame->writeimage($save_path);
+
+        $frame->destroy();
+        $caption_imagick->destroy();
+        $post_imagick->destroy();
+        $profile_imagick->destroy();
+
+        echo "Save image to: {$save_path}" . PHP_EOL;
     }
 }
