@@ -284,9 +284,9 @@
                 var feed = $('#slide_temp').text();
                 feed = JSON.parse(feed);
                 $.each(feed, function (i, v) {
-                    feed_key['s' + v.id] = true;
+                    feed_key['s' + v.post_id] = true;
                     $('#feed_list').find('.row').prepend(frame(v));
-                    $('#feed-' + v.id).fadeIn(500);
+                    $('#feed-' + v.post_id).fadeIn(500);
                     slide.push(v);
                 });
 
@@ -300,11 +300,12 @@
                     var new_entry = false;
                     $.get(url, function (res) {
                         if (res.feed.length > 0) {
+                            $('#feed_list').data('next-feed', res.next_feed);
                             $.each(res.feed, function (i, v) {
-                                if (!feed_key.hasOwnProperty('s' + v.id)) {
-                                    feed_key['s' + v.id] = true;
+                                if (!feed_key.hasOwnProperty('s' + v.post_id)) {
+                                    feed_key['s' + v.post_id] = true;
                                     $('#all_record').prepend(frame(v));
-                                    $('#feed-' + v.id).fadeIn();
+                                    $('#feed-' + v.post_id).fadeIn();
                                     slide.push(v);
                                     new_entry = true;
                                 }

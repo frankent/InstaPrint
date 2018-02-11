@@ -100,7 +100,7 @@ class AdminController extends Controller
     public function getCarousel($tag_id)
     {
         $segment = Input::get('segment', 0);
-        $feed = Feed::select('id', 'picture_s as thumb', 'picture_l', 'name', 'post_location', 'caption', 'profile_pic')
+        $feed = Feed::select('id', 'picture_s as thumb', 'picture_l', 'name', 'post_location', 'caption', 'profile_pic', 'post_id')
             ->where('tag_id', $tag_id)
             ->where('id', '>', $segment)
             ->orderBy('id', 'asc')
@@ -123,7 +123,7 @@ class AdminController extends Controller
     {
         $segment   = Input::get('segment', 0);
         $tag_id = Input::get('tag_id');
-        $feed   = Feed::select('id', 'picture_s as thumb', 'picture_l', 'name', 'post_location', 'caption', 'profile_pic')
+        $feed   = Feed::select('id', 'picture_s as thumb', 'picture_l', 'name', 'post_location', 'caption', 'profile_pic', 'post_id')
             ->where('tag_id', $tag_id)
             ->where('id', '>', $segment)
             ->limit(30)
