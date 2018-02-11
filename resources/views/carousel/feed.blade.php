@@ -237,17 +237,44 @@
             </div>
         </section>
 
-        <div class="hidden" id="slide_temp">
-            <?php echo json_encode($feed); ?>
-        </div>
-
         <script type="text/javascript">
             var feed_key = {};
+            var feed = {};
             var slide = [];
             var index = 0;
+            var moreFeedUrl = $('#feed_list').data('next-feed');
+
+            function getMoreFeed() {
+                var new_entry = false;
+                $.get(moreFeedUrl, function (res) {
+                    if (res.feed.length > 0) {
+                        moreFeedUrl = res.next_feed;
+                        $.each(res.feed, function (i, v) {
+                            if (!feed_key.hasOwnProperty('s' + v.post_id)) {
+                                feed_key['s' + v.post_id] = true;
+                                $('#all_record').prepend(frame(v));
+                                $('#feed-' + v.post_id).fadeIn();
+                                slide.push(v);
+                                new_entry = true;
+                            }
+                        });
+
+                        if (res.feed.length == 9) {
+                            $('#feed_list').data('next-feed', res.next_feed);
+                        }
+
+                        if (new_entry == true) {
+                            index = 0;
+                            setTimeout(function () {
+                                new IScroll('#feed_inside');
+                            }, 1000);
+                        }
+                    }
+                }, 'json');
+            }
 
             function frame(each_feed) {
-                var html = '<div class="col-xs-4" style="display:none; padding-left:10px; padding-right: 10px;" id="feed-' + each_feed.id + '">\n\
+                var html = '<div class="col-xs-4" style="display:block; padding-left:10px; padding-right: 10px;" id="feed-' + each_feed.id + '">\n\
                             <div class="thumbnail" data-profile_pic="' + each_feed.profile_pic + '" data-picture="' + each_feed.picture_l + '" data-name="' + each_feed.name + '" data-location="' + each_feed.post_location + '">\n\
                             <img style="width:100%;" class="img-responsive" src="' + each_feed.thumb + '">\n\
                             <textarea class="hidden">' + each_feed.caption + '</textarea>\n\
@@ -281,48 +308,20 @@
             }
 
             $(function () {
-                var feed = $('#slide_temp').text();
-                feed = JSON.parse(feed);
-                $.each(feed, function (i, v) {
-                    feed_key['s' + v.post_id] = true;
-                    $('#feed_list').find('.row').prepend(frame(v));
-                    $('#feed-' + v.post_id).fadeIn(500);
-                    slide.push(v);
-                });
+                getMoreFeed();
 
-                slideShow();
+                // $.each(feed, function (i, v) {
+                //     feed_key['s' + v.post_id] = true;
+                //     $('#feed_list').find('.row').prepend(frame(v));
+                //     $('#feed-' + v.post_id).fadeIn(500);
+                //     slide.push(v);
+                // });
                 setInterval(function () {
                     slideShow();
                 }, 10000);
 
                 setInterval(function () {
-                    var url = $('#feed_list').data('next-feed');
-                    var new_entry = false;
-                    $.get(url, function (res) {
-                        if (res.feed.length > 0) {
-                            $('#feed_list').data('next-feed', res.next_feed);
-                            $.each(res.feed, function (i, v) {
-                                if (!feed_key.hasOwnProperty('s' + v.post_id)) {
-                                    feed_key['s' + v.post_id] = true;
-                                    $('#all_record').prepend(frame(v));
-                                    $('#feed-' + v.post_id).fadeIn();
-                                    slide.push(v);
-                                    new_entry = true;
-                                }
-                            });
-
-                            if (res.feed.length == 9) {
-                                $('#feed_list').data('next-feed', res.next_feed);
-                            }
-
-                            if (new_entry == true) {
-                                index = 0;
-                                setTimeout(function () {
-                                    new IScroll('#feed_inside');
-                                }, 1000);
-                            }
-                        }
-                    }, 'json');
+                    getMoreFeed();
                 }, 15000);
             });
 
