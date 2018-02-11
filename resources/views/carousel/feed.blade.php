@@ -243,6 +243,7 @@
             var slide = [];
             var index = 0;
             var moreFeedUrl = $('#feed_list').data('next-feed');
+            var start = false;
 
             function getMoreFeed() {
                 var new_entry = false;
@@ -268,6 +269,11 @@
                             setTimeout(function () {
                                 new IScroll('#feed_inside');
                             }, 1000);
+                        }
+
+                        if (start === false) {
+                            start = true;
+                            slideShow();
                         }
                     }
                 }, 'json');
@@ -317,8 +323,9 @@
                 //     slide.push(v);
                 // });
                 setInterval(function () {
+                    start = true;
                     slideShow();
-                }, 10000);
+                }, 7000);
 
                 setInterval(function () {
                     getMoreFeed();
