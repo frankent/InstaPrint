@@ -245,6 +245,14 @@
             var moreFeedUrl = $('#feed_list').data('next-feed');
             var start = false;
 
+
+            function truncate(string){
+                if (string.length > 330)
+                    return string.substring(0, 345)+'...';
+                else
+                    return string;
+            };
+
             function getMoreFeed() {
                 var new_entry = false;
                 $.get(moreFeedUrl, function (res) {
