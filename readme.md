@@ -6,6 +6,6 @@ Call `php artisan instagram:feed` to feed new item
 
 ### ToDo
 
-- Pagination Error - Cannot feed new picture in slide page
+- Add Mutext to prevent sync duplicate
 - Need to implement Image manipulate for Picture frame
 - Need to integrate to Color Printer
