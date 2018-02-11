@@ -247,8 +247,8 @@
 
 
             function truncate(string){
-                if (string.length > 330)
-                    return string.substring(0, 345)+'...';
+                if (string.length > 345)
+                    return string.substring(0, 345)+' ...';
                 else
                     return string;
             };
