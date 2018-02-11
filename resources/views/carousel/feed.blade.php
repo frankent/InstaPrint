@@ -308,7 +308,7 @@
                 $('.random_img').fadeOut(function () {
                     $('#profile_name').text(current_slide['name']);
                     $('#profile_pic').attr('src', current_slide['profile_pic']);
-                    $('#post_caption').text(current_slide['caption']);
+                    $('#post_caption').text(truncate(current_slide['caption']));
 
                     if (current_slide['post_location']) {
                         $('#post_location').text(current_slide['post_location']);
