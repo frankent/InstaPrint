@@ -146,6 +146,7 @@ class OperationController extends Controller
                         $feed_post->caption       = empty($post['caption']) ? null : array_get($post['caption'], 'text');
                         $feed_post->post_id       = $post['id'];
                         $feed_post->tag_id        = $tag['id'];
+                        $feed_post->status        = 'new';
                         $feed_post->post_location = empty($userProfile['graphql']['shortcode_media']['location']) ? null : $userProfile['graphql']['shortcode_media']['location']['name'];
                         $feed_post->save();
 
@@ -195,6 +196,7 @@ class OperationController extends Controller
                                 $feed_post->caption       = empty($post['caption']) ? null : array_get($post['caption'], 'text');
                                 $feed_post->post_id       = $post['id'];
                                 $feed_post->tag_id        = $tag['id'];
+                                $feed_post->status        = 'new';
                                 $feed_post->post_location = empty($post['location']) ? null : array_get($post['location'], 'name');
                                 $feed_post->save();
 
