@@ -222,11 +222,7 @@ class OperationController extends Controller
     {
         $id = $data['id'];
         $img_url = $data['img_url'];
-//        $caption = $data['caption'];
         $username = $data['username'];
-//        $profile_pic = $data['profile_pic'];
-
-//        $font = public_path("font/SukhumvitSet.ttc");
         $save_path = public_path("image/{$id}.jpg");
         $arrContextOptions = array(
             "ssl" => array(
@@ -239,47 +235,33 @@ class OperationController extends Controller
 
         echo "Getting Post Picture" . PHP_EOL;
         $post_blob = file_get_contents($img_url, false, stream_context_create($arrContextOptions));
-
-        $logo_blob = file_get_contents(public_path('img/pk-logo-border.png'), false );
-        $name_tag_blob = file_get_contents(public_path('img/name-tag.png'), false );
-        $bottom_text_blob = file_get_contents(public_path('img/bottom_text.png'), false );
+        $mask_layer = file_get_contents(public_path('img/mask_layer.png'), false);
 
         /**
          * Imagick operate
          */
         echo "Creating image" . PHP_EOL;
+
         $frame = new Imagick();
         $frame->newimage(1200, 1800, "#ffffff");
-
-        $logo_imagick = new Imagick();
-        $logo_imagick->readImageBlob($logo_blob);
-        $logo_imagick->resizeImage(320, 320, Imagick::FILTER_CATROM, 1);
-
-        $bottom_text_imagick = new Imagick();
-        $bottom_text_imagick->readImageBlob($bottom_text_blob);
-        $bottom_text_imagick->resizeImage(632, 87, Imagick::FILTER_CATROM, 1);
-
-        $name_tag_imagick = new Imagick();
-        $name_tag_imagick->readImageBlob($name_tag_blob);
-        $name_tag_imagick->resizeImage(871, 110, Imagick::FILTER_CATROM, 1);
 
         $post_imagick = new Imagick();
         $post_imagick->readimageblob($post_blob);
         $post_imagick->scaleimage(1050, 1050, 1);
         $post_imagick->getImageGeometry();
 
+        $mask_layer_imagick = new Imagick();
+        $mask_layer_imagick->readImageBlob($mask_layer);
+        $mask_layer_imagick->resizeImage(1200, 1800, Imagick::FILTER_CATROM, 1);
 
         $frame->compositeimage($post_imagick, Imagick::COMPOSITE_DEFAULT, 75, 165);
-        $frame->compositeimage($name_tag_imagick, Imagick::COMPOSITE_DEFAULT, 177, 1236);
-        $frame->compositeimage($logo_imagick, Imagick::COMPOSITE_DEFAULT, 440, 1055);
-        $frame->compositeimage($bottom_text_imagick, Imagick::COMPOSITE_DEFAULT, 492, 1659);
+        $frame->compositeimage($mask_layer_imagick, Imagick::COMPOSITE_DEFAULT, 0, 0);
 
         $frame->writeimage($save_path);
 
         $frame->destroy();
         $post_imagick->destroy();
-        $logo_imagick->destroy();
-        $bottom_text_imagick->destroy();
+        $mask_layer_imagick->destroy();
 
         echo "Save image to: {$save_path}" . PHP_EOL;
     }
