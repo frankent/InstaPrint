@@ -265,4 +265,9 @@ class OperationController extends Controller
 
         echo "Save image to: {$save_path}" . PHP_EOL;
     }
+
+    public function printImage() {
+        $newImage = Feed::where('status', 'new')->orderBy('id', 'asc')->limit(5)->get()->toArray();
+        print_r($newImage);
+    }
 }

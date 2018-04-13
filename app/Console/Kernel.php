@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\Instagram::class
+        Commands\Instagram::class,
+        Commands\PrintInstagram::class
     ];
 
     /**
