@@ -267,7 +267,27 @@ class OperationController extends Controller
     }
 
     public function printImage() {
-        $newImage = Feed::where('status', 'new')->orderBy('id', 'asc')->limit(5)->get()->toArray();
-        print_r($newImage);
+        $script_path = public_path('../print_script.sh');
+        if (!file_exists($script_path)) {
+            $newImage = Feed::where('status', 'new')->orderBy('id', 'asc')->limit(5)->get()->toArray();
+
+            $shellScript = '#!/bin/bash' . PHP_EOL;
+            $ids = array();
+            foreach ($newImage as $eachPost) {
+                $ids[] = $eachPost['id'];
+                $path = 'public/image/' . $eachPost['post_id'] . '.jpg';
+
+                echo 'process instaxId: ' . $eachPost['id'] . ' @ ' . $eachPost['post_id'] . PHP_EOL;
+
+                $shellScript .= "lp -o media=A6 {$path}" . PHP_EOL;
+            }
+            $shellScript .= 'rm print_script.sh';
+
+            file_put_contents($script_path, $shellScript);
+
+            Feed::whereIn('id', $ids)->update(['status' => 'processed']);
+        } else {
+            echo 'skip - found print script still on processing' . PHP_EOL;
+        }
     }
 }
