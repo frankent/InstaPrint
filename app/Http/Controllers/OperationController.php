@@ -231,16 +231,16 @@ class OperationController extends Controller
             ),
         );
 
-        echo PHP_EOL . "Process Post Ids: {$id} by {$username}" . PHP_EOL;
+//        echo PHP_EOL . "Process Post Ids: {$id} by {$username}" . PHP_EOL;
 
-        echo "Getting Post Picture" . PHP_EOL;
+//        echo "Getting Post Picture" . PHP_EOL;
         $post_blob = file_get_contents($img_url, false, stream_context_create($arrContextOptions));
         $mask_layer = file_get_contents(public_path('img/mask_layer.png'), false);
 
         /**
          * Imagick operate
          */
-        echo "Creating image" . PHP_EOL;
+//        echo "Creating image" . PHP_EOL;
 
         $frame = new Imagick();
         $frame->newimage(1200, 1800, "#ffffff");
@@ -263,31 +263,33 @@ class OperationController extends Controller
         $post_imagick->destroy();
         $mask_layer_imagick->destroy();
 
-        echo "Save image to: {$save_path}" . PHP_EOL;
+//        echo "Save image to: {$save_path}" . PHP_EOL;
     }
 
     public function printImage() {
-        $script_path = public_path('../print_script.sh');
-        if (!file_exists($script_path)) {
-            $newImage = Feed::where('status', 'new')->orderBy('id', 'asc')->limit(5)->get()->toArray();
+//        $script_path = public_path('../print_script.sh');
+//        if (!file_exists($script_path)) {
+            $newImage = Feed::where('status', 'new')->orderBy('id', 'asc')->limit(1)->get()->toArray();
 
-            $shellScript = '#!/bin/bash' . PHP_EOL;
+            $shellScript = '';
+//            $shellScript = '#!/bin/bash' . PHP_EOL;
             $ids = array();
             foreach ($newImage as $eachPost) {
                 $ids[] = $eachPost['id'];
                 $path = 'public/image/' . $eachPost['post_id'] . '.jpg';
 
-                echo 'process instaxId: ' . $eachPost['id'] . ' @ ' . $eachPost['post_id'] . PHP_EOL;
+//                echo 'process instaxId: ' . $eachPost['id'] . ' @ ' . $eachPost['post_id'] . PHP_EOL;
 
-                $shellScript .= "lp -o media=A6 {$path}" . PHP_EOL;
+                $shellScript = "lp -d Canon_G2000_series -o fit-to-page {$path}" . PHP_EOL;
             }
-            $shellScript .= 'rm print_script.sh';
+//            $shellScript .= 'rm print_script.sh';
 
-            file_put_contents($script_path, $shellScript);
+//            file_put_contents($script_path, $shellScript);
 
             Feed::whereIn('id', $ids)->update(['status' => 'processed']);
-        } else {
-            echo 'skip - found print script still on processing' . PHP_EOL;
-        }
+            echo $shellScript;
+//        } else {
+//            echo 'skip - found print script still on processing' . PHP_EOL;
+//        }
     }
 }
