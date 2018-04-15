@@ -28,7 +28,7 @@
         <div class="row">
             <?php foreach ($feed_split as $each_feed): ?>
                 <div class="col-sm-4">
-                    <div class="box">
+                    <div class="box <?php echo $each_feed['status'] == 'new' ? 'box-new':'box-printed'?>">
                         <div class="box-header with-border">
                             <div class="clearfix">
                                 <div class="col-xs-3" style="padding: 0px;">
@@ -48,7 +48,7 @@
                             </div>
                         </div>
                         <div class="box-body">
-                            <img src="<?php echo $each_feed['picture_s']; ?>" alt="" class="img-responsive" />
+                            <img src="<?php echo $each_feed['picture_m']; ?>" alt="" class="img-responsive" />
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer">
@@ -93,6 +93,11 @@
 @endsection
 
 @section('script')
+<style>
+    .box-new {
+        border-color: #00a65a;
+    }
+</style>
 <script type="text/javascript">
     $(function () {
 
