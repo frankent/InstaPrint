@@ -1,13 +1,15 @@
 # Instagram Printer
-Get all public Instagram feed by #Hashtag please keep in your mind 
+Get all public Instagram feed by #Hashtag
+
+please keep in your mind 
 ```WTF
-THIS PROJECT IS NOT MADE FOR COMMERCIAL...
+THIS PROJECT IS NOT MADE FOR COMMERCIAL USAGE
 ```
 If you want to use it as a commercial **please support me a beer or coffee (my wife drink a lot) :P**
 
 **FYI.** This project has made and used in a few years ago to support my personal wedding. all code and some logic will look messy.
 
-**FYI2**. I will happy if has anyone can improve this project and make a pull request
+**FYI2**. I will happy if has anyone can improve this project and make a pull request back to me
 
 ### Features
 - Get all #Hastag Instagram public feed
@@ -40,13 +42,12 @@ php artisan instagram:print | sh
 
 Cron script example (Write it from my memory not sure is it work)
 ```bash
-# for who use it in with out docker
+# for normal server with php installed
 * * * * * php artisan instagram:feed && php artisan instagram:print | sh
-
 ```
 
 ```bash
-# for docker usage
+# for docker user
 * * * * * docker exec bash -c "cd {path} && php artisan instagram:feed && php artisan instagram:print" | sh
 ```
 
