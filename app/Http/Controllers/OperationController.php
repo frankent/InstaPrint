@@ -30,7 +30,7 @@ class OperationController extends Controller
 
     public function __construct()
     {
-        $config          = config('instagram');
+        $config = config('instagram');
         $this->instagram = new Instagram($config);
     }
 
@@ -50,11 +50,11 @@ class OperationController extends Controller
 
         Log::info($resp);
 
-        $token            = new Token;
-        $token->name      = $resp['user']['full_name'];
-        $token->token     = $resp['access_token'];
+        $token = new Token;
+        $token->name = $resp['user']['full_name'];
+        $token->token = $resp['access_token'];
         $token->is_active = true;
-        $token->picture   = $resp['user']['profile_picture'];
+        $token->picture = $resp['user']['profile_picture'];
         $token->save();
 
         return redirect()->action('AdminController@getLogin')->with('status', 'token_add_success');
@@ -62,8 +62,8 @@ class OperationController extends Controller
 
     public function getDisbleToken()
     {
-        $token_id         = Input::get('id');
-        $token            = Token::find($token_id);
+        $token_id = Input::get('id');
+        $token = Token::find($token_id);
         $token->is_active = false;
         $token->save();
         return redirect()->action('AdminController@getToken')->with('status', 'token_disabled_success');
@@ -72,7 +72,7 @@ class OperationController extends Controller
     public function postHashtag()
     {
         $hash_tag = Input::get('hash_tag');
-        $data     = array(
+        $data = array(
             'hash_tag' => 'required|unique:tag,name'
         );
 
@@ -81,8 +81,8 @@ class OperationController extends Controller
             return redirect()->action('AdminController@getHashtag')->with('status', array('state' => false, 'msg' => $validate->messages()->first()));
         }
 
-        $tag            = new Tag;
-        $tag->name      = $hash_tag;
+        $tag = new Tag;
+        $tag->name = $hash_tag;
         $tag->is_active = true;
         $tag->save();
 
@@ -99,8 +99,8 @@ class OperationController extends Controller
         }
 
         foreach ($tag_status as $each_tag) {
-            $tag            = Tag::find($each_tag['tag_id']);
-            $tag->is_active = (int) $each_tag['is_active'];
+            $tag = Tag::find($each_tag['tag_id']);
+            $tag->is_active = (int)$each_tag['is_active'];
             $tag->save();
         }
 
@@ -109,26 +109,10 @@ class OperationController extends Controller
 
     public function getMedia()
     {
-//        $alive_token = Token::where('is_active', true)->get()->toArray();
-//
-//        if (empty($alive_token)) {
-//            return false;
-//        }
-//
-//        $token        = $alive_token[array_rand($alive_token)];
-//        $access_token = $token['token'];
-//        $user_info    = $this->instagram->getUserInfo($access_token);
-//        if ($user_info == false) {
-//            $current_token            = Token::find($token['id']);
-//            $current_token->is_active = false;
-//            $current_token->save();
-//        }
-
         $all_tags = Tag::where('is_active', true)->get()->toArray();
         foreach ($all_tags as $tag) {
             $hash_tag = $tag['name'];
-//            $feed     = $this->instagram->getHashTagMedia($hash_tag, $access_token);
-            $feed     = $this->instagram->getPublicHashTag($hash_tag);
+            $feed = $this->instagram->getPublicHashTag($hash_tag);
 
             if (!empty($feed)) {
                 foreach ($feed as $post) {
@@ -137,16 +121,16 @@ class OperationController extends Controller
 
                         $userProfile = $this->instagram->getPublicUserProfile($post['shortcode']);
 
-                        $feed_post                = new Feed;
-                        $feed_post->picture_s     = $post['images']['thumbnail']['url'];
-                        $feed_post->picture_m     = $post['images']['low_resolution']['url'];
-                        $feed_post->picture_l     = $post['images']['standard_resolution']['url'];
-                        $feed_post->name          = $userProfile['graphql']['shortcode_media']['owner']['full_name'];
-                        $feed_post->profile_pic   = $userProfile['graphql']['shortcode_media']['owner']['profile_pic_url'];
-                        $feed_post->caption       = empty($post['caption']) ? null : array_get($post['caption'], 'text');
-                        $feed_post->post_id       = $post['id'];
-                        $feed_post->tag_id        = $tag['id'];
-                        $feed_post->status        = 'new';
+                        $feed_post = new Feed;
+                        $feed_post->picture_s = $post['images']['thumbnail']['url'];
+                        $feed_post->picture_m = $post['images']['low_resolution']['url'];
+                        $feed_post->picture_l = $post['images']['standard_resolution']['url'];
+                        $feed_post->name = $userProfile['graphql']['shortcode_media']['owner']['full_name'];
+                        $feed_post->profile_pic = $userProfile['graphql']['shortcode_media']['owner']['profile_pic_url'];
+                        $feed_post->caption = empty($post['caption']) ? null : array_get($post['caption'], 'text');
+                        $feed_post->post_id = $post['id'];
+                        $feed_post->tag_id = $tag['id'];
+                        $feed_post->status = 'new';
                         $feed_post->post_location = empty($userProfile['graphql']['shortcode_media']['location']) ? null : $userProfile['graphql']['shortcode_media']['location']['name'];
                         $feed_post->save();
 
@@ -171,9 +155,9 @@ class OperationController extends Controller
         $alive_token = Token::where('is_active', true)->get()->toArray();
         foreach ($alive_token as $token) {
             $access_token = $token['token'];
-            $user_info    = $this->instagram->getUserInfo($access_token);
+            $user_info = $this->instagram->getUserInfo($access_token);
             if ($user_info == false) {
-                $current_token            = Token::find($token['id']);
+                $current_token = Token::find($token['id']);
                 $current_token->is_active = false;
                 $current_token->save();
             }
@@ -187,16 +171,16 @@ class OperationController extends Controller
                         if (in_array($hash_tag, $post['tags']) && $post['type'] == 'image') {
                             $validate = Validator::make(array('post_id' => $post['id']), array('post_id' => 'required|unique:feed,post_id,NULL,id,tag_id,' . $tag['id']));
                             if ($validate->passes()) {
-                                $feed_post                = new Feed;
-                                $feed_post->picture_s     = $post['images']['thumbnail']['url'];
-                                $feed_post->picture_m     = $post['images']['low_resolution']['url'];
-                                $feed_post->picture_l     = $post['images']['standard_resolution']['url'];
-                                $feed_post->name          = $post['user']['full_name'];
-                                $feed_post->profile_pic   = $post['user']['profile_picture'];
-                                $feed_post->caption       = empty($post['caption']) ? null : array_get($post['caption'], 'text');
-                                $feed_post->post_id       = $post['id'];
-                                $feed_post->tag_id        = $tag['id'];
-                                $feed_post->status        = 'new';
+                                $feed_post = new Feed;
+                                $feed_post->picture_s = $post['images']['thumbnail']['url'];
+                                $feed_post->picture_m = $post['images']['low_resolution']['url'];
+                                $feed_post->picture_l = $post['images']['standard_resolution']['url'];
+                                $feed_post->name = $post['user']['full_name'];
+                                $feed_post->profile_pic = $post['user']['profile_picture'];
+                                $feed_post->caption = empty($post['caption']) ? null : array_get($post['caption'], 'text');
+                                $feed_post->post_id = $post['id'];
+                                $feed_post->tag_id = $tag['id'];
+                                $feed_post->status = 'new';
                                 $feed_post->post_location = empty($post['location']) ? null : array_get($post['location'], 'name');
                                 $feed_post->save();
 
@@ -222,7 +206,7 @@ class OperationController extends Controller
     {
         $id = $data['id'];
         $img_url = $data['img_url'];
-        $username = $data['username'];
+//        $username = $data['username'];
         $save_path = public_path("image/{$id}.jpg");
         $arrContextOptions = array(
             "ssl" => array(
@@ -230,7 +214,6 @@ class OperationController extends Controller
                 "verify_peer_name" => false,
             ),
         );
-
 //        echo PHP_EOL . "Process Post Ids: {$id} by {$username}" . PHP_EOL;
 
 //        echo "Getting Post Picture" . PHP_EOL;
@@ -266,30 +249,24 @@ class OperationController extends Controller
 //        echo "Save image to: {$save_path}" . PHP_EOL;
     }
 
-    public function printImage() {
-//        $script_path = public_path('../print_script.sh');
-//        if (!file_exists($script_path)) {
-            $newImage = Feed::where('status', 'new')->orderBy('id', 'asc')->limit(1)->get()->toArray();
+    public function printImage()
+    {
 
-            $shellScript = '';
-//            $shellScript = '#!/bin/bash' . PHP_EOL;
-            $ids = array();
-            foreach ($newImage as $eachPost) {
-                $ids[] = $eachPost['id'];
-                $path = 'public/image/' . $eachPost['post_id'] . '.jpg';
+        $newImage = Feed::where('status', 'new')->orderBy('id', 'asc')->limit(1)->get()->toArray();
+
+        $shellScript = '';
+        $ids = array();
+        foreach ($newImage as $eachPost) {
+            $ids[] = $eachPost['id'];
+            $path = 'public/image/' . $eachPost['post_id'] . '.jpg';
 
 //                echo 'process instaxId: ' . $eachPost['id'] . ' @ ' . $eachPost['post_id'] . PHP_EOL;
 
-                $shellScript = "lp -d Canon_G2000_series -o fit-to-page {$path}" . PHP_EOL;
-            }
-//            $shellScript .= 'rm print_script.sh';
+            $shellScript = "lp -d Canon_G2000_series -o fit-to-page {$path}" . PHP_EOL;
+        }
 
-//            file_put_contents($script_path, $shellScript);
+        Feed::whereIn('id', $ids)->update(['status' => 'processed']);
+        echo $shellScript;
 
-            Feed::whereIn('id', $ids)->update(['status' => 'processed']);
-            echo $shellScript;
-//        } else {
-//            echo 'skip - found print script still on processing' . PHP_EOL;
-//        }
     }
 }

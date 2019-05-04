@@ -26,16 +26,16 @@ class AdminController extends Controller
 
     public function __construct()
     {
-        $config          = config('instagram');
+        $config = config('instagram');
         $this->instagram = new Instagram($config);
     }
 
     public function getLogin()
     {
         $token = Token::where('is_active', 1)->orderBy('created_at', 'desc')->get();
-        $data  = array(
+        $data = array(
             'authorize_link' => $this->instagram->getLoginUrl(array('basic')),
-            'token'          => $token->toArray()
+            'token' => $token->toArray()
         );
 
         return view('carousel.login', $data);
@@ -58,9 +58,9 @@ class AdminController extends Controller
     public function getToken()
     {
         $token = Token::orderBy('created_at', 'desc')->get();
-        $data  = array(
+        $data = array(
             'authorize_link' => $this->instagram->getLoginUrl(array('basic')),
-            'token'          => $token->toArray()
+            'token' => $token->toArray()
         );
         return view('admin.token', $data);
     }
@@ -81,17 +81,17 @@ class AdminController extends Controller
 
     public function getFeed($tag_id)
     {
-        $tag  = Tag::find($tag_id);
+        $tag = Tag::find($tag_id);
         $feed = Feed::where('tag_id', $tag_id)->orderBy('created_at', 'desc')->paginate(30)->toArray();
         $data = array(
-            'tag'        => $tag,
+            'tag' => $tag,
             'pagination' => array(
                 'prev_page_url' => $feed['prev_page_url'],
                 'next_page_url' => $feed['next_page_url'],
-                'current_page'  => $feed['current_page'],
-                'last_page'     => $feed['last_page']
+                'current_page' => $feed['current_page'],
+                'last_page' => $feed['last_page']
             ),
-            'feed'       => $feed['data']
+            'feed' => $feed['data']
         );
 
         return view('admin.archivetag', $data);
@@ -99,21 +99,13 @@ class AdminController extends Controller
 
     public function getCarousel($tag_id)
     {
-//        $segment = Input::get('segment', 0);
-//        $feed = Feed::select('id', 'picture_s as thumb', 'picture_l', 'name', 'post_location', 'caption', 'profile_pic', 'post_id')
-//            ->where('tag_id', $tag_id)
-//            ->where('id', '>', $segment)
-//            ->orderBy('id', 'asc')
-//            ->limit(30)
-//            ->get();
 
         $tag_info = Tag::select('name')->find($tag_id)->toArray();
 
         $data = [
-            'tag_id'    => $tag_id,
-            'tag_name'  => array_get($tag_info, 'name'),
+            'tag_id' => $tag_id,
+            'tag_name' => array_get($tag_info, 'name'),
             'next_feed' => action('AdminController@getMoreCorousel', array('segment' => 0, 'tag_id' => $tag_id)),
-//            'feed'      => $feed->toArray()
         ];
 
         return view('carousel.feed', $data);
@@ -121,28 +113,26 @@ class AdminController extends Controller
 
     public function getMoreCorousel()
     {
-        $segment   = Input::get('segment', 0);
+        $segment = Input::get('segment', 0);
         $tag_id = Input::get('tag_id');
-        $feed   = Feed::select('id', 'picture_s as thumb', 'picture_l', 'name', 'post_location', 'caption', 'profile_pic', 'post_id')
+        $feed = Feed::select('id', 'picture_s as thumb', 'picture_l', 'name', 'post_location', 'caption', 'profile_pic', 'post_id')
             ->where('tag_id', $tag_id)
             ->where('id', '>', $segment)
             ->limit(30)
             ->get();
-//        foreach ($feed['data'] as &$each_feed) {
-//            $each_feed['thumb'] = str_replace('150x150', '640x640', $each_feed['thumb']);
-//        }
+
 
         if (count($feed)) {
             $data = [
-                'tag_id'    => $tag_id,
+                'tag_id' => $tag_id,
                 'next_feed' => action('AdminController@getMoreCorousel', array('segment' => $feed[count($feed) - 1]->id, 'tag_id' => $tag_id)),
-                'feed'      => $feed->toArray()
+                'feed' => $feed->toArray()
             ];
         } else {
             $data = [
-                'tag_id'    => $tag_id,
+                'tag_id' => $tag_id,
                 'next_feed' => action('AdminController@getMoreCorousel', array('segment' => $segment, 'tag_id' => $tag_id)),
-                'feed'      => []
+                'feed' => []
             ];
         }
 
